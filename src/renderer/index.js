@@ -2,20 +2,19 @@ const allQuestions = [
     {
         question: "What is 10/2?",
         answers: {
-            a: '3',
-            b: '5',
-            c: '115'
+            A: ['3', -1],
+            B: ['5', 0],
+            C: ['115', 1]
         },
-        correctAnswer: 'b'
     },
     {
         question: "What is 30/3?",
         answers: {
-            a: '3',
-            b: '5',
-            c: '10'
+            A: ['3', -1],
+            B: ['5', 0],
+            C: ['115', 1]
         },
-        correctAnswer: 'c'
+
     }
 ];
 
@@ -23,7 +22,7 @@ const quizContainer = document.getElementById('quiz');
 const resultsContainer = document.getElementById('results');
 const submitButton = document.getElementById('submit');
 
-generateQuiz(myQuestions, quizContainer, resultsContainer, submitButton);
+generateQuiz(allQuestions, quizContainer, resultsContainer, submitButton);
 
 function generateQuiz(questions, quizContainer, resultsContainer, submitButton) {
 
@@ -77,20 +76,9 @@ function generateQuiz(questions, quizContainer, resultsContainer, submitButton) 
 
             // find selected answer
             userAnswer = (answerContainers[i].querySelector('input[name=question' + i + ']:checked') || {}).value;
-
-            // if answer is correct
-            if (userAnswer === questions[i].correctAnswer) {
-                // add to the number of correct answers
-                numCorrect++;
-
-                // color the answers green
-                answerContainers[i].style.color = 'lightgreen';
-            }
-            // if answer is wrong or blank
-            else {
-                // color the answers red
-                answerContainers[i].style.color = 'red';
-            }
+            console.log(questions[i].answers[userAnswer][1])
+            console.log(userAnswer)
+            
         }
 
         // show number of correct answers out of total
