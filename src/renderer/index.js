@@ -1,3 +1,5 @@
+require('./style.css');
+
 const allQuestions = [
     {
         question: "What is 10/2?",
@@ -18,79 +20,84 @@ const allQuestions = [
     }
 ];
 
+let playerOne = 0;
+let playerTwo = 0;
+let q = 0
+
 const quizContainer = document.getElementById('quiz');
 const resultsContainer = document.getElementById('results');
 const submitButton = document.getElementById('submit');
 
-generateQuiz(allQuestions, quizContainer, resultsContainer, submitButton);
+const showQuestions = (questions, quizContainer) => {
+    const output = [];
+    let answers;
 
-function generateQuiz(questions, quizContainer, resultsContainer, submitButton) {
+    for (let i = 0; i < questions.length; i++) {
+        answers = [];
+        for (letter in questions[i].answers) {
 
-    function showQuestions(questions, quizContainer) {
-        // we'll need a place to store the output and the answer choices
-        var output = [];
-        var answers;
-
-        // for each question...
-        for (var i = 0; i < questions.length; i++) {
-
-            // first reset the list of answers
-            answers = [];
-
-            // for each available answer...
-            for (letter in questions[i].answers) {
-
-                // ...add an html radio button
-                answers.push(
-                    '<label>'
-                    + '<input type="radio" name="question' + i + '" value="' + letter + '">'
-                    + letter + ': '
-                    + questions[i].answers[letter]
-                    + '</label>'
-                );
-            }
-
-            // add this question and its answers to the output
-            output.push(
-                '<div class="question">' + questions[i].question + '</div>'
-                + '<div class="answers">' + answers.join('') + '</div>'
+            answers.push(
+                '<label>'
+                + '<input type="radio" name="question' + i + '" value="' + letter + '">'
+                + letter + ': '
+                + questions[i].answers[letter][0]
+                + '</label>'
             );
         }
 
-        // finally combine our output list into one string of html and put it on the page
-        quizContainer.innerHTML = output.join('');
+        output.push(
+            '<div class="questionContainer">' +
+            '<div class="question">' + questions[i].question + '</div>'
+            + '<div class="answers">' + answers.join('') + '</div>' + '</div>'
+        );
     }
+    quizContainer.innerHTML = output.join('');
+}
 
 
-    function showResults(questions, quizContainer, resultsContainer) {
+const showResults = (questions, key) => {
+    console.log(key)
+    const score = []
+    const singleScore = questions[q].answers[key][1];
+    score.push(singleScore)
+    console.log(score.reduce((a, b) => a + b, 0))
+    q++
+    console.log(q);
+    handleHiddenQuestion()
+}
 
-        // gather answer containers from our quiz
-        var answerContainers = quizContainer.querySelectorAll('.answers');
 
-        // keep track of user's answers
-        var userAnswer = '';
-        var numCorrect = 0;
+const handleHiddenQuestion = () => {
+    const allQuestionsContainers = document.getElementById(`quiz`).childNodes
+    console.log(allQuestionsContainers)
 
-        // for each question...
-        for (var i = 0; i < questions.length; i++) {
-
-            // find selected answer
-            userAnswer = (answerContainers[i].querySelector('input[name=question' + i + ']:checked') || {}).value;
-            console.log(questions[i].answers[userAnswer][1])
-            console.log(userAnswer)
-            
-        }
-
-        // show number of correct answers out of total
-        resultsContainer.innerHTML = numCorrect + ' out of ' + questions.length;
-    }
-
-    // show questions right away
-    showQuestions(questions, quizContainer);
-
-    // on submit, show results
-    submitButton.onclick = function () {
-        showResults(questions, quizContainer, resultsContainer);
+    if (q == 0) {
+        allQuestionsContainers[0].style.display = "block";
+    } else {
+        const oldQ = q - 1;
+        console.log(oldQ)
+        allQuestionsContainers[oldQ].style.display = "none";
+        allQuestionsContainers[q].style.display = "block";
     }
 
 }
+
+
+showQuestions(allQuestions, quizContainer);
+if (q == 0) {
+    handleHiddenQuestion()
+}
+document.addEventListener('keydown', function (event) {
+    if (event.keyCode == 65) {
+        showResults(allQuestions, "A");
+    }
+    else if (event.keyCode == 66) {
+        showResults(allQuestions, "B");
+    }
+    else if (event.keyCode == 67) {
+        showResults(allQuestions, "C");
+    }
+});
+
+
+
