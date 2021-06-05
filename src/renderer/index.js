@@ -104,5 +104,113 @@ function generateQuiz(questions, quizContainer, resultsContainer, submitButton) 
     submitButton.onclick = function () {
         showResults(questions, quizContainer, resultsContainer);
     }
-
 }
+
+// new quiz engine
+
+const questionsArray = [
+    {
+        question: `Have you ever heard about the Filter Bubble?`,
+        answers: {
+            a: `Yes`,
+            b: `I'm not sure`,
+            c: `Definitely not`
+        },
+        positive: `a`,
+        neutral: `b`,
+        negative: `c`
+    },
+    {
+        question: `When you're planning on watching a show or movie on your streaming service, how do you choose (mostly) what movie you want to see?`,
+        answers: {
+            a: `I actually don't have a streaming service...`,
+            b: `I scroll through my feed and watch whatever I know I'll enjoy.`,
+            c: `I'll probably search for a specific series of movie that a friend recommended to me.`
+        },
+        positive: `a`,
+        neutral: `c`,
+        negative: `b`
+    },
+    {
+        question: `So, what do YOU do when a website asks you to accept cookies?`,
+        answers: {
+            a: `I just click "Accept".`,
+            b: `If possible, I select the information that I'll give them.`,
+            c: `I'll always press "Cancel".`
+        },
+        positive: `c`,
+        neutral: `b`,
+        negative: `a`
+    },
+    {
+        question: `And how often do you clear your cookies or search history?`,
+        answers: {
+            a: `Urm... should I do that?`,
+            b: `About 1 to 5 times per year.`,
+            c: `Certainly more than 5 times each year.`
+        },
+        positive: `c`,
+        neutral: `b`,
+        negative: `a`
+    },
+    {
+        question: `Let's take this article for example. A friend has posted it on facebook, where you saw it pop up in your feed. It already has a lot of likes and comments, and quite frankly, you really liked reading that article too, so you want to share it as well. What would you do?`,
+        answers: {
+            a: `I'll always check multiple other sources before sharing.`,
+            b: `I'd just post is without asking many questions.`,
+            c: `If I'm questioning the articles plausibility, I'll first do a fact-check.`
+
+        },
+        positive: `a`,
+        neutral: `c`,
+        negative: `b`
+    },
+    {
+        question: `A friend has posted this article on facebook. It already has a lot of likes and comments, however, you strongly disagree. What's going to be your first reaction?`,
+        answers: {
+            a: `I'll read the comments with an open mind and may leave a comment myself.`,
+            b: `I'll roll my eyes and keep on scrolling.`,
+            c: `I'll leave an ironic comment and might even unfriend him afterwards.`
+
+        },
+        positive: `a`,
+        neutral: `b`,
+        negative: `c`
+    },
+    {
+        question: `How many different browsers do you use on regular base?`,
+        answers: {
+            a: `just 1`,
+            b: `2`,
+            c: `more than 2`
+
+        },
+        positive: `c`,
+        neutral: `b`,
+        negative: `a`
+    },
+    {
+        question: `How often do you watch the news on tv or listen on the radio?`,
+        answers: {
+            a: `I'll actively go watch the news frequently.`,
+            b: `I won't switch channels if it pops up, but I won't go looking for it either.`,
+            c: `I avoid having to hear or watch the news.`
+
+        },
+        positive: `a`,
+        neutral: `b`,
+        negative: `c`
+    }
+];
+
+const showQuestions = () => {
+    questionsArray.forEach(question => {
+        console.log(question.question);
+    })
+};
+
+const init = () => {
+    showQuestions();
+};
+
+init();
