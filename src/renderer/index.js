@@ -203,10 +203,24 @@ const questionsArray = [
     }
 ];
 
+let questionNumber = 1;
+const questionSelector = document.getElementById(`questions`);
+
 const showQuestions = () => {
-    questionsArray.forEach(question => {
-        console.log(question.question);
-    })
+    for (let i = 0; i < questionsArray.length; i++) {
+        console.log(questionsArray[i].question);
+
+        questionSelector.innerHTML += `<p>${questionsArray[i].question}</p>`;
+
+        for (const [key, value] of Object.entries(questionsArray[i].answers)) {
+            console.log(`${key}: ${value}`);
+
+            questionSelector.innerHTML += `<div>
+            <input type="radio" name="question${i}" value="${i}-${value}">
+            <label>${value}</label></div>
+            `
+        }
+    }
 };
 
 const init = () => {
