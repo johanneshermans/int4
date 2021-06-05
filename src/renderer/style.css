@@ -1,3 +1,14 @@
 .questionContainer {
     display: none;
+    text-align: center;
+}
+.question {
+    font-size: 3em;
+}
+.answers {
+    font-size: 2em;
+    text-align: left;
+}
+.answers input {
+    opacity: 0;
 }
