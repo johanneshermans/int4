@@ -216,7 +216,7 @@ const showQuestions = () => {
             console.log(`${key}: ${value}`);
 
             questionSelector.innerHTML += `<div>
-            <input type="radio" name="question${i}" value="${i}-${value}">
+            <input type="radio" name="question${i}" value="${i}-${key}">
             <label>${value}</label></div>
             `
         }
