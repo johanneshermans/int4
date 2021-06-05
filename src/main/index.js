@@ -13,8 +13,9 @@ function createMainWindow() {
   const window = new BrowserWindow({ webPreferences: { nodeIntegration: true } })
 
   const child = new BrowserWindow({ webPreferences: { nodeIntegration: true, webSecurity: false } })
+  console.log(isDevelopment)
   console.log('file://' + __dirname + '/child.html');
-  child.loadURL('file://' + __dirname + '/child.html');
+  child.loadURL(`http://localhost:9080/child.html`)
   child.once('ready-to-show', () => {
     child.show()
   })

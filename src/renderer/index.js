@@ -1,230 +1,164 @@
+require('./style.css');
+
 const allQuestions = [
-    {
-        question: "What is 10/2?",
-        answers: {
-            a: '3',
-            b: '5',
-            c: '115'
-        },
-        correctAnswer: 'b'
-    },
-    {
-        question: "What is 30/3?",
-        answers: {
-            a: '3',
-            b: '5',
-            c: '10'
-        },
-        correctAnswer: 'c'
-    }
-];
-
-const quizContainer = document.getElementById('quiz');
-const resultsContainer = document.getElementById('results');
-const submitButton = document.getElementById('submit');
-
-generateQuiz(allQuestions, quizContainer, resultsContainer, submitButton);
-
-function generateQuiz(questions, quizContainer, resultsContainer, submitButton) {
-
-    function showQuestions(questions, quizContainer) {
-        // we'll need a place to store the output and the answer choices
-        var output = [];
-        var answers;
-
-        // for each question...
-        for (var i = 0; i < questions.length; i++) {
-
-            // first reset the list of answers
-            answers = [];
-
-            // for each available answer...
-            for (letter in questions[i].answers) {
-
-                // ...add an html radio button
-                answers.push(
-                    '<label>'
-                    + '<input type="radio" name="question' + i + '" value="' + letter + '">'
-                    + letter + ': '
-                    + questions[i].answers[letter]
-                    + '</label>'
-                );
-            }
-
-            // add this question and its answers to the output
-            output.push(
-                '<div class="question">' + questions[i].question + '</div>'
-                + '<div class="answers">' + answers.join('') + '</div>'
-            );
-        }
-
-        // finally combine our output list into one string of html and put it on the page
-        quizContainer.innerHTML = output.join('');
-    }
-
-
-    function showResults(questions, quizContainer, resultsContainer) {
-
-        // gather answer containers from our quiz
-        var answerContainers = quizContainer.querySelectorAll('.answers');
-
-        // keep track of user's answers
-        var userAnswer = '';
-        var numCorrect = 0;
-
-        // for each question...
-        for (var i = 0; i < questions.length; i++) {
-
-            // find selected answer
-            userAnswer = (answerContainers[i].querySelector('input[name=question' + i + ']:checked') || {}).value;
-
-            // if answer is correct
-            if (userAnswer === questions[i].correctAnswer) {
-                // add to the number of correct answers
-                numCorrect++;
-
-                // color the answers green
-                answerContainers[i].style.color = 'lightgreen';
-            }
-            // if answer is wrong or blank
-            else {
-                // color the answers red
-                answerContainers[i].style.color = 'red';
-            }
-        }
-
-        // show number of correct answers out of total
-        resultsContainer.innerHTML = numCorrect + ' out of ' + questions.length;
-    }
-
-    // show questions right away
-    showQuestions(questions, quizContainer);
-
-    // on submit, show results
-    submitButton.onclick = function () {
-        showResults(questions, quizContainer, resultsContainer);
-    }
-}
-
-// new quiz engine
-
-const questionsArray = [
     {
         question: `Have you ever heard about the Filter Bubble?`,
         answers: {
-            a: `Yes`,
-            b: `I'm not sure`,
-            c: `Definitely not`
+            A: [`Yes`, 1],
+            B: [`I'm not sure`, 0],
+            C: [`Definitely not`, -1]
         },
-        positive: `a`,
-        neutral: `b`,
-        negative: `c`
     },
     {
         question: `When you're planning on watching a show or movie on your streaming service, how do you choose (mostly) what movie you want to see?`,
         answers: {
-            a: `I actually don't have a streaming service...`,
-            b: `I scroll through my feed and watch whatever I know I'll enjoy.`,
-            c: `I'll probably search for a specific series of movie that a friend recommended to me.`
+            A: [`I actually don't have a streaming service...`, 1],
+            B: [`I scroll through my feed and watch whatever I know I'll enjoy.`, -1],
+            C: [`I'll probably search for a specific series of movie that a friend recommended to me.`, 1]
         },
-        positive: `a`,
-        neutral: `c`,
-        negative: `b`
     },
     {
         question: `So, what do YOU do when a website asks you to accept cookies?`,
         answers: {
-            a: `I just click "Accept".`,
-            b: `If possible, I select the information that I'll give them.`,
-            c: `I'll always press "Cancel".`
+            A: [`I just click "Accept".`, -1],
+            B: [`If possible, I select the information that I'll give them.`, 0],
+            C: [`I'll always press "Cancel".`, 1]
         },
-        positive: `c`,
-        neutral: `b`,
-        negative: `a`
     },
     {
         question: `And how often do you clear your cookies or search history?`,
         answers: {
-            a: `Urm... should I do that?`,
-            b: `About 1 to 5 times per year.`,
-            c: `Certainly more than 5 times each year.`
+            A: [`Urm... should I do that?`, -1],
+            B: [`About 1 to 5 times per year.`, 0],
+            C: [`Certainly more than 5 times each year.`, 1]
         },
-        positive: `c`,
-        neutral: `b`,
-        negative: `a`
     },
     {
         question: `Let's take this article for example. A friend has posted it on facebook, where you saw it pop up in your feed. It already has a lot of likes and comments, and quite frankly, you really liked reading that article too, so you want to share it as well. What would you do?`,
         answers: {
-            a: `I'll always check multiple other sources before sharing.`,
-            b: `I'd just post is without asking many questions.`,
-            c: `If I'm questioning the articles plausibility, I'll first do a fact-check.`
+            A: [`I'll always check multiple other sources before sharing.`, 1],
+            B: [`I'd just post it without asking many questions.`, -1],
+            C: [`If I'm questioning the articles plausibility, I'll first do a fact-check.`, 0]
 
         },
-        positive: `a`,
-        neutral: `c`,
-        negative: `b`
     },
     {
         question: `A friend has posted this article on facebook. It already has a lot of likes and comments, however, you strongly disagree. What's going to be your first reaction?`,
         answers: {
-            a: `I'll read the comments with an open mind and may leave a comment myself.`,
-            b: `I'll roll my eyes and keep on scrolling.`,
-            c: `I'll leave an ironic comment and might even unfriend him afterwards.`
+            A: [`I'll read the comments with an open mind and may leave a comment myself.`, 1],
+            B: [`I'll roll my eyes and keep on scrolling.`, -1],
+            C: [`I'll leave an ironic comment and might even unfriend him afterwards.`, 0]
 
         },
-        positive: `a`,
-        neutral: `b`,
-        negative: `c`
     },
     {
         question: `How many different browsers do you use on regular base?`,
         answers: {
-            a: `just 1`,
-            b: `2`,
-            c: `more than 2`
+            A: [`just 1`, -1],
+            B: [`2`, 0],
+            C: [`more than 2`, 1]
 
         },
-        positive: `c`,
-        neutral: `b`,
-        negative: `a`
     },
     {
         question: `How often do you watch the news on tv or listen on the radio?`,
         answers: {
-            a: `I'll actively go watch the news frequently.`,
-            b: `I won't switch channels if it pops up, but I won't go looking for it either.`,
-            c: `I avoid having to hear or watch the news.`
-
+            A: [`I'll actively go watch the news frequently.`, 1],
+            B: [`I won't switch channels if it pops up, but I won't go looking for it either.`, 0],
+            C: [`I avoid having to hear or watch the news.`, -1],
         },
-        positive: `a`,
-        neutral: `b`,
-        negative: `c`
     }
 ];
 
-let questionNumber = 1;
-const questionSelector = document.getElementById(`questions`);
+const scoreOne = []
+let playerOne = 0;
 
-const showQuestions = () => {
-    for (let i = 0; i < questionsArray.length; i++) {
-        console.log(questionsArray[i].question);
+const scoreTwo = []
+let playerTwo = 0;
+let q = 0
 
-        questionSelector.innerHTML += `<p>${questionsArray[i].question}</p>`;
+const quizContainer = document.getElementById('quiz');
 
-        for (const [key, value] of Object.entries(questionsArray[i].answers)) {
-            console.log(`${key}: ${value}`);
+const showQuestions = (questions, quizContainer) => {
+    const output = [];
+    let answers;
 
-            questionSelector.innerHTML += `<div>
-            <input type="radio" name="question${i}" value="${i}-${key}">
-            <label>${value}</label></div>
-            `
+    for (let i = 0; i < questions.length; i++) {
+        answers = [];
+        for (letter in questions[i].answers) {
+
+            answers.push(
+                '<label>'
+                + '<input type="radio" name="question' + i + '" value="' + letter + '"><br>'
+                + letter + ': '
+                + questions[i].answers[letter][0]
+                + '</label>'
+            );
         }
+
+        output.push(
+            '<div class="questionContainer">' +
+            '<div class="question">' + questions[i].question + '</div>'
+            + '<div class="answers">' + answers.join('') + '</div>' + '</div>'
+        );
     }
-};
+    quizContainer.innerHTML = output.join('');
+}
 
-const init = () => {
-    showQuestions();
-};
 
-init();
+const showResults = (questions, key, player) => {
+    const singleScore = questions[q].answers[key][1];
+    if (player === 1) {
+        scoreOne.push(singleScore)
+        playerOne = scoreOne.reduce((a, b) => a + b, 0)
+    } else if (player === 2) {
+        scoreTwo.push(singleScore)
+        playerTwo = scoreTwo.reduce((a, b) => a + b, 0)
+    }
+    console.log(playerOne)
+    console.log(playerTwo)
+    q++
+    handleHiddenQuestion()
+}
+
+
+const handleHiddenQuestion = () => {
+    const allQuestionsContainers = document.getElementById(`quiz`).childNodes
+    if (q == 0) {
+        allQuestionsContainers[0].style.display = "block";
+    } else if (q > allQuestions.length - 1) {
+        const oldQ = q - 1;
+        allQuestionsContainers[oldQ].style.display = "none";
+        console.log("end")
+    } else {
+        const oldQ = q - 1;
+        allQuestionsContainers[oldQ].style.display = "none";
+        allQuestionsContainers[q].style.display = "block";
+    }
+}
+
+showQuestions(allQuestions, quizContainer);
+if (q == 0) {
+    handleHiddenQuestion()
+}
+document.addEventListener('keydown', function (event) {
+    if (event.keyCode == 65) {
+        showResults(allQuestions, "A", 1);
+    }
+    else if (event.keyCode == 90) {
+        showResults(allQuestions, "B", 1);
+    }
+    else if (event.keyCode == 69) {
+        showResults(allQuestions, "C", 1);
+    }
+    else if (event.keyCode == 81) {
+        showResults(allQuestions, "A", 2);
+    }
+    else if (event.keyCode == 83) {
+        showResults(allQuestions, "B", 2);
+    }
+    else if (event.keyCode == 68) {
+        showResults(allQuestions, "C", 3);
+    }
+});
+

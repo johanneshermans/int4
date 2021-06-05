@@ -9,6 +9,7 @@
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
   },
   "dependencies": {
+    "nodebots-interchange": "^2.1.3",
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {
