@@ -25,8 +25,7 @@ let playerTwo = 0;
 let q = 0
 
 const quizContainer = document.getElementById('quiz');
-const resultsContainer = document.getElementById('results');
-const submitButton = document.getElementById('submit');
+
 
 const showQuestions = (questions, quizContainer) => {
     const output = [];
@@ -98,6 +97,4 @@ document.addEventListener('keydown', function (event) {
         showResults(allQuestions, "C");
     }
 });
-
-
 
