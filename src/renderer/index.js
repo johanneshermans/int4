@@ -39,9 +39,6 @@ const allQuestions = [
             A: [`I'll always check multiple other sources before sharing.`, 1],
             B: [`I'd just post it without asking many questions.`, -1],
             C: [`If I'm questioning the articles plausibility, I'll first do a fact-check.`, 0]
-<<<<<<< HEAD
-=======
-
         },
     },
     {
@@ -50,29 +47,10 @@ const allQuestions = [
             A: [`I'll read the comments with an open mind and may leave a comment myself.`, 1],
             B: [`I'll roll my eyes and keep on scrolling.`, -1],
             C: [`I'll leave an ironic comment and might even unfriend him afterwards.`, 0]
->>>>>>> 7f2fcb2ad5bd6de6d22fa686b6545b8cb08d221c
 
         },
     },
     {
-<<<<<<< HEAD
-        question: `A friend has posted this article on facebook. It already has a lot of likes and comments, however, you strongly disagree. What's going to be your first reaction?`,
-        answers: {
-            A: [`I'll read the comments with an open mind and may leave a comment myself.`, 1],
-            B: [`I'll roll my eyes and keep on scrolling.`, -1],
-            C: [`I'll leave an ironic comment and might even unfriend him afterwards.`, 0]
-=======
-        question: `How many different browsers do you use on regular base?`,
-        answers: {
-            A: [`just 1`, -1],
-            B: [`2`, 0],
-            C: [`more than 2`, 1]
->>>>>>> 7f2fcb2ad5bd6de6d22fa686b6545b8cb08d221c
-
-        },
-    },
-    {
-<<<<<<< HEAD
         question: `How many different browsers do you use on regular base?`,
         answers: {
             A: [`just 1`, -1],
@@ -95,21 +73,6 @@ let bothPlayers = [];
 const scoreOne = []
 let playerOne = 0;
 const scoreTwo = [];
-=======
-        question: `How often do you watch the news on tv or listen on the radio?`,
-        answers: {
-            A: [`I'll actively go watch the news frequently.`, 1],
-            B: [`I won't switch channels if it pops up, but I won't go looking for it either.`, 0],
-            C: [`I avoid having to hear or watch the news.`, -1],
-        },
-    }
-];
-
-const scoreOne = []
-let playerOne = 0;
-
-const scoreTwo = []
->>>>>>> 7f2fcb2ad5bd6de6d22fa686b6545b8cb08d221c
 let playerTwo = 0;
 let q = 0
 
