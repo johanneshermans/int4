@@ -114,18 +114,16 @@ const showResults = (questions, key, player) => {
     if (player === 1) {
         scoreOne.push(singleScore)
         playerOne = scoreOne.reduce((a, b) => a + b, 0);
-        if(playerOne < 0) {
+        if (playerOne < 0) {
             playerOne = 0;
         }
     } else if (player === 2) {
         scoreTwo.push(singleScore)
         playerTwo = scoreTwo.reduce((a, b) => a + b, 0);
-        if(playerTwo < 0) {
+        if (playerTwo < 0) {
             playerTwo = 0;
         }
     }
-    console.log(playerOne)
-    console.log(playerTwo)
 }
 
 
@@ -158,7 +156,6 @@ const checkBothPlayers = (player, key) => {
     const pOne = bothPlayers.includes(1)
     const pTwo = bothPlayers.includes(2);
     if (pOne === true && pTwo === true) {
-        console.log("twee")
         bothPlayers = [];
         q++
         handleHiddenQuestion();
@@ -183,7 +180,7 @@ const checkButton = (event) => {
         showResults(allQuestions, "B", 2);
     }
     else if (event == 68) {
-        showResults(allQuestions, "C", 3);
+        showResults(allQuestions, "C", 2);
     }
 }
 
@@ -206,11 +203,12 @@ var strip = null;
 
 //VARIABELEN
 const aantalVragen = 7;
+let usedLedsBlue = [];
+let usedLedsRed = [];
 
 
 const updateStrip = () => {
     const splitLength = strip.length / 2;
-    console.log('yes');
 
     const partLength = Math.round(splitLength / aantalVragen);
     const lengthScore1 = partLength * playerOne;
@@ -222,7 +220,7 @@ const updateStrip = () => {
     let hexString2 = rgbToHex(rgbScore2);
 
     //gespleten
-    for (let i = 0; i < splitLength; i++) {
+    /*for (let i = 0; i < splitLength; i++) {
         if (i > splitLength - lengthScore1) {
             strip.pixel(i).color('#F00');
         } else {
@@ -236,13 +234,79 @@ const updateStrip = () => {
         } else {
             strip.pixel(i).color('#000');
         }
+    }*/
+
+    //gespleten random
+    console.log('zoveel rode lichten moeten branden: ' + lengthScore1);
+    console.log('zoveel rode lichten branden NU: ' + usedLedsRed.length);
+    console.log('zoveel blauwe lichten moeten branden: ' + lengthScore2);
+    console.log('zoveel blauwe lichten branden NU: ' + usedLedsBlue.length);
+    console.log('Elke speler krijgt zoveel lichten: ' + splitLength);
+
+    if (lengthScore1 > usedLedsRed.length) {
+        const loopTimes = usedLedsRed.length;
+        for (let i = 0; i < lengthScore1 - loopTimes; i++) {
+            const randomInt = Math.floor(Math.random() * splitLength);
+            if (!usedLedsRed.includes(randomInt)) {
+                strip.pixel(randomInt).color('#F00');
+                usedLedsRed.push(randomInt);
+            } else {
+                i = i - 1;
+            }
+        }
+    } else if (lengthScore1 < usedLedsRed.length) {
+        for (let i = 0; i < usedLedsRed.length - lengthScore1; i++) {
+            const randomInt = Math.floor(Math.random() * (usedLedsRed.length - 1));
+            strip.pixel(usedLedsRed[randomInt]).color('#000');
+            usedLedsRed.splice(randomInt, 1);
+        }
     }
 
+    if (lengthScore2 > usedLedsBlue.length) {
+        const loopTimes = usedLedsBlue.length
+        for (let i = 0; i < lengthScore1 - loopTimes; i++) {
+            const randomInt = Math.floor(Math.random() * splitLength + splitLength);
+            if (!usedLedsBlue.includes(randomInt)) {
+                strip.pixel(randomInt).color('#00F');
+                usedLedsBlue.push(randomInt);
+            } else {
+                i = i - 1;
+            }
+        }
+    } else if (lengthScore2 < usedLedsBlue.length) {
+        for (let i = 0; i < usedLedsBlue.length - lengthScore1; i++) {
+            const randomInt = Math.floor(Math.random() * (usedLedsBlue.length - 1));
+            strip.pixel(usedLedsBlue[randomInt]).color('#000');
+            usedLedsBlue.splice(randomInt, 1);
+
+        }
+    }
+
+    //fullStrip split
+    /*const score1S = playerOne;
+    const score2S = playerTwo;
+    console.log(strip);
+
+    if(score1S + score2S === 0) {
+        strip.color('#000');
+    } else {
+    const pix1 = Math.round(strip.length * score1S/(score1S+score2S));
+
+    for (let i = 0; i < pix1; i++) {
+        strip.pixel(i).color('#00F');
+    }
+
+    for (let i = pix1; i < strip.length; i++) {
+        strip.pixel(i).color('#F00');
+    }
+    }*/
+
+
     //Algemeen gemiddeld kleur
-    strip.color('#' + hexString1 + '00' + hexString2);
-    console.log('#' + hexString1 + '00' + hexString2);
+    //strip.color('#' + hexString1 + '00' + hexString2);
 
     strip.show();
+
 
 }
 
@@ -250,17 +314,20 @@ const updateStrip = () => {
 board.on("ready", function () {
     // Define our hardware.
     // It's a 12px ring connected to pin 6.
-    
+
     bumper = new five.Button(5);
+    led = new five.Led(4)
     console.log(bumper);
 
     bumper.on("hit", function () {
 
         console.log('hit');
 
+
+
     }).on("release", function () {
         console.log('release');
-
+        led.on();
     });
 
 
@@ -277,7 +344,10 @@ board.on("ready", function () {
     const partLength = Math.round(splitLength / aantalVragen);
     const lengthScore1 = partLength * playerOne;
     const lengthScore2 = partLength * playerTwo;
-
+    let rgbScore1 = Math.round((255 / aantalVragen) * playerOne);
+    let rgbScore2 = Math.round((255 / aantalVragen) * playerTwo);
+    let hexString1 = rgbToHex(rgbScore1);
+    let hexString2 = rgbToHex(rgbScore2);
 
     // Just like DOM-ready for web developers.
     strip.on("ready", function () {
@@ -293,16 +363,16 @@ board.on("ready", function () {
         // Set the entire strip to pink.
 
         //gespleten
-        for(let i=0; i<splitLength; i++) {
-            if(i > splitLength-lengthScore1) {
+        for (let i = 0; i < splitLength; i++) {
+            if (i > splitLength - lengthScore1) {
                 strip.pixel(i).color('#F00');
             } else {
                 strip.pixel(i).color('#000');
             }
         }
 
-        for(let i=splitLength; i<(splitLength*2); i++) {
-            if(i < lengthScore2+splitLength) {
+        for (let i = splitLength; i < (splitLength * 2); i++) {
+            if (i < lengthScore2 + splitLength) {
                 strip.pixel(i).color('#00F');
             } else {
                 strip.pixel(i).color('#000');
@@ -317,9 +387,29 @@ board.on("ready", function () {
 
 });
 
+const $vid = document.querySelector(`.video`);
+
+
+const stripColorize = (hex) => {
+    strip.color(hex);
+    strip.show();
+
+    setTimeout(updateStrip, 1000);
+}
+
+const drawLoop = () => {
+    const vidTime = $vid.currentTime;
+    if (vidTime > 3.8 && vidTime < 3.9) {
+        stripColorize('#99FF22');
+    }
+    window.requestAnimationFrame(drawLoop);
+}
+
 //________________________________________________________________________________________________________________________________________________
 
 const init = () => {
+    // drawLoop();
+
     document.addEventListener('keydown', function (event) {
         if (event.keyCode == 65 || event.keyCode == 90 || event.keyCode == 69) {
             checkBothPlayers(1, event.keyCode);

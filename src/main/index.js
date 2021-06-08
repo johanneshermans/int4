@@ -14,11 +14,11 @@ function createMainWindow() {
 
   const child = new BrowserWindow({ webPreferences: { nodeIntegration: true, webSecurity: false } })
   console.log(isDevelopment)
-  console.log('file://' + __dirname + '/child.html');
+  /*console.log('file://' + __dirname + '/child.html');
   child.loadURL(`http://localhost:9080/child.html`)
   child.once('ready-to-show', () => {
     child.show()
-  })
+  })*/
 
   if (isDevelopment) {
     window.webContents.openDevTools()
