@@ -208,6 +208,8 @@ let usedLedsRed = [];
 
 
 const updateStrip = () => {
+    strip.color('#000000');
+
     const splitLength = strip.length / 2;
 
     const partLength = Math.round(splitLength / aantalVragen);
@@ -237,18 +239,12 @@ const updateStrip = () => {
     }*/
 
     //gespleten random
-    console.log('zoveel rode lichten moeten branden: ' + lengthScore1);
-    console.log('zoveel rode lichten branden NU: ' + usedLedsRed.length);
-    console.log('zoveel blauwe lichten moeten branden: ' + lengthScore2);
-    console.log('zoveel blauwe lichten branden NU: ' + usedLedsBlue.length);
-    console.log('Elke speler krijgt zoveel lichten: ' + splitLength);
 
     if (lengthScore1 > usedLedsRed.length) {
         const loopTimes = usedLedsRed.length;
         for (let i = 0; i < lengthScore1 - loopTimes; i++) {
             const randomInt = Math.floor(Math.random() * splitLength);
             if (!usedLedsRed.includes(randomInt)) {
-                strip.pixel(randomInt).color('#F00');
                 usedLedsRed.push(randomInt);
             } else {
                 i = i - 1;
@@ -261,13 +257,15 @@ const updateStrip = () => {
             usedLedsRed.splice(randomInt, 1);
         }
     }
+    usedLedsRed.forEach(element => {
+        strip.pixel(element).color('#F00');
+    });
 
     if (lengthScore2 > usedLedsBlue.length) {
         const loopTimes = usedLedsBlue.length
         for (let i = 0; i < lengthScore1 - loopTimes; i++) {
             const randomInt = Math.floor(Math.random() * splitLength + splitLength);
             if (!usedLedsBlue.includes(randomInt)) {
-                strip.pixel(randomInt).color('#00F');
                 usedLedsBlue.push(randomInt);
             } else {
                 i = i - 1;
@@ -281,6 +279,9 @@ const updateStrip = () => {
 
         }
     }
+    usedLedsBlue.forEach(element => {
+        strip.pixel(element).color('#00F');
+    });
 
     //fullStrip split
     /*const score1S = playerOne;
@@ -382,7 +383,7 @@ board.on("ready", function () {
         //Algemeen gemiddeld kleur
         //strip.color('#' + hexString1 + '00' + hexString2);
 
-        strip.show();
+        strip.off();
     });
 
 });
@@ -408,7 +409,7 @@ const drawLoop = () => {
 //________________________________________________________________________________________________________________________________________________
 
 const init = () => {
-    // drawLoop();
+    drawLoop();
 
     document.addEventListener('keydown', function (event) {
         if (event.keyCode == 65 || event.keyCode == 90 || event.keyCode == 69) {

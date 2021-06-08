@@ -12,3 +12,7 @@
 .answers input {
     opacity: 0;
 }
+
+.video {
+    width: 60rem;
+}
