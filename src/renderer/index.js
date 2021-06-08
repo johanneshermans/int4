@@ -106,3 +106,103 @@ function generateQuiz(questions, quizContainer, resultsContainer, submitButton) 
     }
 
 }
+
+
+pixel = require("node-pixel");
+five = require("johnny-five");
+
+
+    const rgbToHex = (rgb) => {
+        let hex = Number(rgb).toString(16);
+    if (hex.length < 2) {
+        hex = "0" + hex;
+    }
+    return hex;
+    }
+
+var board = new five.Board({
+    repl: false
+});
+var strip = null;
+
+board.on("ready", function () {
+    // Define our hardware.
+    // It's a 12px ring connected to pin 6.
+    led = new five.Led(4);
+    led.off()
+    bumper = new five.Button(5);
+    console.log(bumper);
+    led = new five.Led(4);
+
+  bumper.on("hit", function() {
+
+    console.log('hit');
+
+  }).on("release", function() {
+    led.off();
+    console.log('release');
+
+  });
+
+
+    const aantalVragen = 7;
+    const score1 = 3;
+    const score2 = 5;
+
+    const rgbScore1 = Math.round((255/aantalVragen)*score1);
+    const rgbScore2 = Math.round((255/aantalVragen)*score2);
+
+    const hexString1 = rgbToHex(rgbScore1);
+    const hexString2 = rgbToHex(rgbScore2);
+
+
+    strip = new pixel.Strip({
+        board: this,
+        controller: "FIRMATA",
+        strips: [{ pin: 7, length: 216 },],
+        gamma: 2.8,
+    });
+    console.log(strip);
+
+    const splitLength = strip.length/2;
+    console.log(splitLength);
+
+    const partLength = Math.round(splitLength/aantalVragen);
+    const lengthScore1 = partLength*score1;
+    const lengthScore2 = partLength*score2;
+
+    // Just like DOM-ready for web developers.
+    strip.on("ready", function () {
+        /*for(let i = 0; i<216; i++) {
+            if(i % 2 === 0){
+                strip.pixel(i).color('#F00');
+            } else if(i % 2 === 1){
+                strip.pixel(i).color('#00F');
+            } else if(i % 3 === 2){
+                strip.pixel(i).color('#FF8800');
+            }
+        }*/
+        // Set the entire strip to pink.
+
+        //gespleten
+        /*for(let i=0; i<splitLength; i++) {
+            console.log(i);
+            if(i > splitLength-lengthScore1) {
+                strip.pixel(i).color('#F00');
+            }
+        }
+
+        for(let i=splitLength; i<(splitLength*2); i++) {
+            console.log(i);
+            if(i < lengthScore2+splitLength) {
+                strip.pixel(i).color('#00F');
+            }
+        }*/
+
+        //Algemeen gemiddeld kleur
+        strip.color('#' + hexString1 + '00' + hexString2);
+
+        strip.off();
+    });
+
+});
