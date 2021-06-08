@@ -1,5 +1,8 @@
 require('./style.css');
 
+pixel = require("node-pixel");
+five = require("johnny-five");
+
 const allQuestions = [
     {
         question: `Have you ever heard about the Filter Bubble?`,
@@ -39,6 +42,7 @@ const allQuestions = [
             A: [`I'll always check multiple other sources before sharing.`, 1],
             B: [`I'd just post it without asking many questions.`, -1],
             C: [`If I'm questioning the articles plausibility, I'll first do a fact-check.`, 0]
+
         },
     },
     {
@@ -176,6 +180,105 @@ const checkButton = (event) => {
     }
 }
 
+
+
+//_____________________________________________________________________________________________________________________________________________
+
+const rgbToHex = (rgb) => {
+    let hex = Number(rgb).toString(16);
+    if (hex.length < 2) {
+        hex = "0" + hex;
+    }
+    return hex;
+}
+
+var board = new five.Board({
+    repl: false
+});
+var strip = null;
+
+//VARIABELEN
+const aantalVragen = 7;
+let rgbScore1 = Math.round((255 / aantalVragen) * playerOne);
+let rgbScore2 = Math.round((255 / aantalVragen) * playerTwo);
+let hexString1 = rgbToHex(rgbScore1);
+let hexString2 = rgbToHex(rgbScore2);
+
+
+//BOARD
+board.on("ready", function () {
+    // Define our hardware.
+    // It's a 12px ring connected to pin 6.
+    
+    bumper = new five.Button(5);
+    console.log(bumper);
+
+    bumper.on("hit", function () {
+
+        console.log('hit');
+
+    }).on("release", function () {
+        console.log('release');
+
+    });
+
+
+    strip = new pixel.Strip({
+        board: this,
+        controller: "FIRMATA",
+        strips: [{ pin: 7, length: 216 },],
+        gamma: 2.8,
+    });
+    console.log(strip);
+
+    const splitLength = strip.length / 2;
+    console.log(splitLength);
+
+    const partLength = Math.round(splitLength / aantalVragen);
+    const lengthScore1 = partLength * playerOne;
+    const lengthScore2 = partLength * playerTwo;
+
+
+    // Just like DOM-ready for web developers.
+    strip.on("ready", function () {
+        /*for(let i = 0; i<216; i++) {
+            if(i % 2 === 0){
+                strip.pixel(i).color('#F00');
+            } else if(i % 2 === 1){
+                strip.pixel(i).color('#00F');
+            } else if(i % 3 === 2){
+                strip.pixel(i).color('#FF8800');
+            }
+        }*/
+        // Set the entire strip to pink.
+
+        //gespleten
+        for(let i=0; i<splitLength; i++) {
+            if(i > splitLength-lengthScore1) {
+                strip.pixel(i).color('#F00');
+            } else {
+                strip.pixel(i).color('#000');
+            }
+        }
+
+        for(let i=splitLength; i<(splitLength*2); i++) {
+            if(i < lengthScore2+splitLength) {
+                strip.pixel(i).color('#00F');
+            } else {
+                strip.pixel(i).color('#000');
+            }
+        }
+
+        //Algemeen gemiddeld kleur
+        //strip.color('#' + hexString1 + '00' + hexString2);
+
+        strip.show();
+    });
+
+});
+
+//________________________________________________________________________________________________________________________________________________
+
 const init = () => {
     document.addEventListener('keydown', function (event) {
         if (event.keyCode == 65 || event.keyCode == 90 || event.keyCode == 69) {
@@ -187,5 +290,3 @@ const init = () => {
 }
 
 init()
-
-
