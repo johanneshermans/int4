@@ -49,8 +49,8 @@ const allQuestions = [
         question: `A friend has posted this article on facebook. It already has a lot of likes and comments, however, you strongly disagree. What's going to be your first reaction?`,
         answers: {
             A: [`I'll read the comments with an open mind and may leave a comment myself.`, 1],
-            B: [`I'll roll my eyes and keep on scrolling.`, -1],
-            C: [`I'll leave an ironic comment and might even unfriend him afterwards.`, 0]
+            B: [`I'll roll my eyes and keep on scrolling.`, 0],
+            C: [`I'll leave an ironic comment and might even unfriend him afterwards.`, -1]
 
         },
     },
@@ -113,10 +113,16 @@ const showResults = (questions, key, player) => {
     const singleScore = questions[q].answers[key][1];
     if (player === 1) {
         scoreOne.push(singleScore)
-        playerOne = scoreOne.reduce((a, b) => a + b, 0)
+        playerOne = scoreOne.reduce((a, b) => a + b, 0);
+        if(playerOne < 0) {
+            playerOne = 0;
+        }
     } else if (player === 2) {
         scoreTwo.push(singleScore)
-        playerTwo = scoreTwo.reduce((a, b) => a + b, 0)
+        playerTwo = scoreTwo.reduce((a, b) => a + b, 0);
+        if(playerTwo < 0) {
+            playerTwo = 0;
+        }
     }
     console.log(playerOne)
     console.log(playerTwo)
@@ -155,7 +161,8 @@ const checkBothPlayers = (player, key) => {
         console.log("twee")
         bothPlayers = [];
         q++
-        handleHiddenQuestion()
+        handleHiddenQuestion();
+        updateStrip();
     }
 }
 
@@ -199,11 +206,45 @@ var strip = null;
 
 //VARIABELEN
 const aantalVragen = 7;
-let rgbScore1 = Math.round((255 / aantalVragen) * playerOne);
-let rgbScore2 = Math.round((255 / aantalVragen) * playerTwo);
-let hexString1 = rgbToHex(rgbScore1);
-let hexString2 = rgbToHex(rgbScore2);
 
+
+const updateStrip = () => {
+    const splitLength = strip.length / 2;
+    console.log('yes');
+
+    const partLength = Math.round(splitLength / aantalVragen);
+    const lengthScore1 = partLength * playerOne;
+    const lengthScore2 = partLength * playerTwo;
+
+    let rgbScore1 = Math.round((255 / aantalVragen) * playerOne);
+    let rgbScore2 = Math.round((255 / aantalVragen) * playerTwo);
+    let hexString1 = rgbToHex(rgbScore1);
+    let hexString2 = rgbToHex(rgbScore2);
+
+    //gespleten
+    for (let i = 0; i < splitLength; i++) {
+        if (i > splitLength - lengthScore1) {
+            strip.pixel(i).color('#F00');
+        } else {
+            strip.pixel(i).color('#000');
+        }
+    }
+
+    for (let i = splitLength; i < (splitLength * 2); i++) {
+        if (i < lengthScore2 + splitLength) {
+            strip.pixel(i).color('#00F');
+        } else {
+            strip.pixel(i).color('#000');
+        }
+    }
+
+    //Algemeen gemiddeld kleur
+    strip.color('#' + hexString1 + '00' + hexString2);
+    console.log('#' + hexString1 + '00' + hexString2);
+
+    strip.show();
+
+}
 
 //BOARD
 board.on("ready", function () {
@@ -229,7 +270,6 @@ board.on("ready", function () {
         strips: [{ pin: 7, length: 216 },],
         gamma: 2.8,
     });
-    console.log(strip);
 
     const splitLength = strip.length / 2;
     console.log(splitLength);
