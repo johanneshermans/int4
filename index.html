@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html>
 
 <head>
-  <meta charset="UTF-8">
-  <title>Hello World!</title>
-  <link rel="stylesheet" href="./style.css">
+    <meta charset="UTF-8">
+    <title>Hello World!!</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-  <h1>Hello World!</h1>
-  <button id="open-second-window">Open Second Window</button>
-  <video class="video" autoplay muted loop>
-    <source src="static/movie.mp4" type="video/mp4">
-  </video>
-  <script>
-    require('./index.js');
-  </script>
+    <h1>Hello World!</h1>
+    <video class="video" autoplay muted controls loop>
+        <source src="static/movie.mp4" type="video/mp4">
+    </video>
+    <button id="open-second-window">Open Second Window</button>
+    <div id="error"></div>
+    <div id="ports"></div>
 </body>
 
+<script src="./indexRenderer.js"></script>
 
 </html>

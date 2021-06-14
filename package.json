@@ -1,21 +1,33 @@
 {
-  "name": "electron-communication-example",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
-  "main": "main.js",
-  "scripts": {
-    "rebuild-deps": "electron-builder install-app-deps",
-    "start": "electron ."
-  },
-  "dependencies": {
-    "electron-builder": "^22.11.7",
-    "johnny-five": "^2.0.0",
-    "node-pixel": "^0.11.0",
-    "serialport": "^8.0.8"
-  },
-  "author": "GitHub",
-  "license": "CC0-1.0",
-  "devDependencies": {
-    "electron": "^1.8.8"
-  }
+    "name": "electron-serialport",
+    "version": "1.0.2",
+    "description": "A minimal Electron application with node serialport",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "install": "electron-rebuild"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:serialport/electron-serialport.git"
+    },
+    "keywords": [
+        "Electron",
+        "quick",
+        "start",
+        "tutorial",
+        "demo"
+    ],
+    "author": "GitHub",
+    "license": "CC0-1.0",
+    "devDependencies": {
+        "electron": "^11.2.0",
+        "electron-rebuild": "^2.3.5"
+    },
+    "dependencies": {
+        "johnny-five": "^2.0.0",
+        "node-pixel": "^0.11.0",
+        "serialport": "^9.0.6",
+        "tableify": "^1.1.0"
+    }
 }
