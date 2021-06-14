@@ -1,4 +1,11 @@
-The cuvle exprience code
+# electron-communication-example
 
-Dit is de basiscode waar we alle demo's zullen samenvoegen tot 1 geheel.
-Op dit moment is dit de engine van de quiz die werkt.
+An example implementation on how to communicate between two electron browser windows.
+
+To try it out clone this repository, run `npm install && npm start`.
+
+
+## License
+
+[CC0 1.0 (Public Domain)](LICENSE.md)
+
