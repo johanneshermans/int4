@@ -7,11 +7,15 @@
 const ipc = require('electron').ipcRenderer;
 const openSecondWindowButton = document.getElementById('open-second-window');
 const $vid = document.querySelector(`.video`);
-let loop = true
+const loops = [[true, 29], [true, 79], [true, 110], [true, 120], [true, 130], [true, 140], [true, 150], [true, 160]];
+let loopCounter = 0;
+
 
 ipc.on('messageFromMain', (event, message) => {
   console.log(message)
-  loop = false
+  loops[loopCounter][0] = false
+  loopCounter++
+  console.log(loopCounter)
 });
 
 openSecondWindowButton.addEventListener('click', (event) => {
@@ -19,13 +23,12 @@ openSecondWindowButton.addEventListener('click', (event) => {
 });
 
 const drawLoop = (bool) => {
-
   const vidTime = $vid.currentTime;
-  if (loop) {
-    console.log(vidTime)
-    if (vidTime > 79) {
+  console.log(loops[loopCounter][0])
+  if (loops[loopCounter][0]) {
+    if (vidTime > loops[loopCounter][1]) {
 
-      $vid.currentTime = 76;
+      $vid.currentTime = loops[loopCounter][1] - 3;
       ipc.send('rep');
     }
   }
