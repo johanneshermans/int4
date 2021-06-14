@@ -4,19 +4,18 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
+    "rebuild-deps": "electron-builder install-app-deps",
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
+  "dependencies": {
+    "electron-builder": "^22.11.7",
+    "johnny-five": "^2.0.0",
+    "node-pixel": "^0.11.0",
+    "serialport": "^8.0.8"
+  },
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^1.4.1"
+    "electron": "^1.8.8"
   }
 }

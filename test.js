@@ -14,8 +14,6 @@ ipc.on('messageFromSecond', (event, message) => {
 
 
 
-
-
 const allQuestions = [
 	{
 		question: `Have you ever heard about the Filter Bubble?`,
