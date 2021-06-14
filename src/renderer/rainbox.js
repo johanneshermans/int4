@@ -306,6 +306,7 @@ const updateStrip = () => {
 
     //Algemeen gemiddeld kleur
     //strip.color('#' + hexString1 + '00' + hexString2);
+
     strip.show();
 
 
@@ -382,8 +383,8 @@ board.on("ready", function () {
 
         //Algemeen gemiddeld kleur
         //strip.color('#' + hexString1 + '00' + hexString2);
-        strip.color('#ff0066');
-        strip.show();
+
+        strip.off();
     });
 
 });
@@ -409,7 +410,7 @@ const drawLoop = () => {
 //________________________________________________________________________________________________________________________________________________
 
 const init = () => {
-    //drawLoop();
+    drawLoop();
 
     document.addEventListener('keydown', function (event) {
         if (event.keyCode == 65 || event.keyCode == 90 || event.keyCode == 69) {
