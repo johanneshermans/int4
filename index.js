@@ -1,7 +1,17 @@
-const ipc = require('electron').ipcRenderer;
+ipc = require('electron').ipcRenderer;
 const openSecondWindowButton = document.getElementById('open-second-window');
 const $vid = document.querySelector(`.video`);
 let loop = true
+
+const five = require('johnny-five');
+const board = new five.Board({
+	repl: false
+});
+
+board.on("ready", () => {
+	const led = new five.Led(9);
+	led.blink(500);
+});
 
 ipc.on('messageFromMain', (event, message) => {
 	console.log(message)
