@@ -28,7 +28,7 @@ const drawLoop = (bool) => {
   if (loops[loopCounter][0]) {
     if (vidTime > loops[loopCounter][1]) {
 
-      $vid.currentTime = loops[loopCounter][1] - 3;
+      $vid.currentTime = loops[loopCounter][1] - 2.9;
       ipc.send('rep');
     }
   }
