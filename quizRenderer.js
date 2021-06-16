@@ -3,11 +3,16 @@ ipc.on('message', (event, message) => console.log(message));
 pixel = require("node-pixel");
 const five = require('johnny-five');
 
-const sendMessageButton = document.getElementById('send-message');
+const quizContainer = document.getElementById('quiz');
+const nothing = document.getElementById('nothing');
+let bothPlayers = [];
+const scoreOne = []
+let playerOne = 0;
+const scoreTwo = [];
+let playerTwo = 0;
+let q = 0;
+let showAnswers = false;
 
-sendMessageButton.addEventListener('click', event => {
-    ipc.send('reply', `Send message from second window to renderer via main.`);
-});
 
 ipc.on('messageFromSecond', (event, message) => {
     showAnswers = true;
@@ -108,15 +113,7 @@ board.on("ready", function () {
     });
 }); */
 
-const quizContainer = document.getElementById('quiz');
-const nothing = document.getElementById('nothing');
-let bothPlayers = [];
-const scoreOne = []
-let playerOne = 0;
-const scoreTwo = [];
-let playerTwo = 0;
-let q = 0;
-let showAnswers = false;
+
 
 const showQuestions = (questions, quizContainer) => {
     const output = [];
@@ -128,11 +125,10 @@ const showQuestions = (questions, quizContainer) => {
         for (const letter in answ) {
 
             answers.push(
-                '<label>'
-                + '<input type="radio" name="question' + i + '" value="' + letter + '"><br>'
-                + letter + ': '
+                '<label class="question' + letter + '">'
+                + '<input type="radio" name="question' + i + '" value="' + letter + '">'
                 + questions[i].answers[letter][0]
-                + '</label>'
+                + '</label><br>'
             );
         }
 
@@ -146,12 +142,14 @@ const showQuestions = (questions, quizContainer) => {
 }
 
 const handleQuestions = () => {
+    console.log(showAnswers)
     if (showAnswers === false) {
         quizContainer.style.display = "none"
         nothing.style.display = "block"
     } else if (showAnswers === true) {
         nothing.style.display = "none"
         quizContainer.style.display = "block"
+        quizContainer.classList.add("fade-in")
     }
 }
 
@@ -205,6 +203,8 @@ const checkBothPlayers = (player, key) => {
     const pTwo = bothPlayers.includes(2);
     if (pOne === true && pTwo === true) {
         bothPlayers = [];
+        showAnswers = false;
+        handleQuestions();
         q++
         handleHiddenQuestion();
         ipc.send('reply');

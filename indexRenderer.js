@@ -5,10 +5,13 @@
 //const serialport = require('serialport')
 
 const ipc = require('electron').ipcRenderer;
-const openSecondWindowButton = document.getElementById('open-second-window');
 const $vid = document.querySelector(`.video`);
 const loops = [[true, 29], [true, 79], [true, 110], [true, 120], [true, 130], [true, 140], [true, 150], [true, 160]];
+const audioPlays = [false, false, false]
 let loopCounter = 0;
+let introDone = false;
+
+let introAudio;
 
 
 ipc.on('messageFromMain', (event, message) => {
@@ -18,13 +21,18 @@ ipc.on('messageFromMain', (event, message) => {
   console.log(loopCounter)
 });
 
-openSecondWindowButton.addEventListener('click', (event) => {
-  ipc.send('rep', `back`);
-});
 
-const drawLoop = (bool) => {
+const drawLoop = () => {
+  if (introAudio.paused) {
+
+    if (!introDone) {
+      introDone = true;
+      $vid.play();
+      const audio = new Audio(`static/main${loopCounter + 1}.wav`);
+      audio.play();
+    }
+  }
   const vidTime = $vid.currentTime;
-  console.log(loops[loopCounter][0])
   if (loops[loopCounter][0]) {
     if (vidTime > loops[loopCounter][1]) {
 
@@ -32,12 +40,29 @@ const drawLoop = (bool) => {
       ipc.send('rep');
     }
   }
+  console.log(loopCounter);
+  console.log(audioPlays[loopCounter]);
+
+  if (loopCounter > 0) {
+    if (vidTime > loops[loopCounter - 1][1] + 1.5 && !audioPlays[loopCounter]) {
+      console.log('done');
+      audioPlays[loopCounter] = true;
+      const audio = new Audio(`static/main${loopCounter + 1}.wav`);
+      audio.play();
+    }
+  }
 
   window.requestAnimationFrame(drawLoop);
 }
 
+const startAudio = () => {
+  introAudio = new Audio(`static/intro.wav`);
+  introAudio.play();
+}
+
 
 const init = () => {
+  startAudio();
   drawLoop();
 }
 
