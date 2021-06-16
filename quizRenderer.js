@@ -41,52 +41,44 @@ const allQuestions = [
     {
         question: `So, what do YOU do when a website asks you to accept cookies?`,
         answers: {
-            A: [`I just click "Accept".`, -1],
-            B: [`If possible, I select the information that I'll give them.`, 0],
-            C: [`I'll always press "Cancel".`, 1]
+            A: [`Accepteren`, -1],
+            B: [`Opties selecteren`, 0],
+            C: [`Weigeren`, 1]
         },
     },
     {
         question: `And how often do you clear your cookies or search history?`,
         answers: {
-            A: [`Urm... should I do that?`, -1],
-            B: [`About 1 to 5 times per year.`, 0],
-            C: [`Certainly more than 5 times each year.`, 1]
+            A: [`Delen zonder twijfel`, -1],
+            B: [`Kijken of de nieuwsbron betrouwbaar lijkt`, 0],
+            C: [`Controleren met meerdere bronnen`, 1]
         },
     },
     {
         question: `Let's take this article for example. A friend has posted it on facebook, where you saw it pop up in your feed. It already has a lot of likes and comments, and quite frankly, you really liked reading that article too, so you want to share it as well. What would you do?`,
         answers: {
-            A: [`I'll always check multiple other sources before sharing.`, 1],
-            B: [`I'd just post it without asking many questions.`, -1],
-            C: [`If I'm questioning the articles plausibility, I'll first do a fact-check.`, 0]
+            A: [`Lezen en reageren met open mind`, 1],
+            B: [`Sarcastisch reageren en misschien zelfs blokkeren`, -1],
+            C: [`Ogen rollen en verder scrollen`, 0]
 
         },
     },
     {
         question: `A friend has posted this article on facebook. It already has a lot of likes and comments, however, you strongly disagree. What's going to be your first reaction?`,
         answers: {
-            A: [`I'll read the comments with an open mind and may leave a comment myself.`, 1],
-            B: [`I'll roll my eyes and keep on scrolling.`, 0],
-            C: [`I'll leave an ironic comment and might even unfriend him afterwards.`, -1]
+            A: [`Zo goed als altijd`, 1],
+            B: [`Af en toe wel eens`, 0],
+            C: [`Nog nooit van gehoord`, -1]
 
         },
     },
     {
         question: `How many different browsers do you use on regular base?`,
         answers: {
-            A: [`just 1`, -1],
-            B: [`2`, 0],
-            C: [`more than 2`, 1]
+            A: [`Kan dat dan?`, -1],
+            B: [`1 a 5 keer per jaar`, 0],
+            C: [`meer dan 5 keer per jaar`, 1]
 
-        },
-    },
-    {
-        question: `How often do you watch the news on tv or listen on the radio?`,
-        answers: {
-            A: [`I'll actively go watch the news frequently.`, 1],
-            B: [`I won't switch channels if it pops up, but I won't go looking for it either.`, 0],
-            C: [`I avoid having to hear or watch the news.`, -1],
         },
     }
 ];
