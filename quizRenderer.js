@@ -23,7 +23,7 @@ ipc.on('messageFromSecond', (event, message) => {
 
 const allQuestions = [
     {
-        question: `Have you ever heard about the Filter Bubble?`,
+        question: `Heb je ooit gehoord over de filter bubbel?`,
         answers: {
             A: [`Ja`, 1],
             B: [`Wel eens van gehoord`, 0],
@@ -31,7 +31,7 @@ const allQuestions = [
         },
     },
     {
-        question: `When you're planning on watching a show or movie on your streaming service, how do you choose (mostly) what movie you want to see?`,
+        question: `Hoe kies jij welke film, serie of show je gaat kijken?`,
         answers: {
             A: [`Iets onder mijn recommendations`, -1],
             B: [`Iets wat een vriend me heeft aangeraden`, 1],
@@ -39,7 +39,7 @@ const allQuestions = [
         },
     },
     {
-        question: `So, what do YOU do when a website asks you to accept cookies?`,
+        question: `Wat doe jij wanneer een website je vraagt hun cookies te accepteren?`,
         answers: {
             A: [`Accepteren`, -1],
             B: [`Opties selecteren`, 0],
@@ -47,7 +47,7 @@ const allQuestions = [
         },
     },
     {
-        question: `And how often do you clear your cookies or search history?`,
+        question: `Wat zou jij doen als je een entertainend, choquerend artikel leest?`,
         answers: {
             A: [`Delen zonder twijfel`, -1],
             B: [`Kijken of de nieuwsbron betrouwbaar lijkt`, 0],
@@ -55,7 +55,7 @@ const allQuestions = [
         },
     },
     {
-        question: `Let's take this article for example. A friend has posted it on facebook, where you saw it pop up in your feed. It already has a lot of likes and comments, and quite frankly, you really liked reading that article too, so you want to share it as well. What would you do?`,
+        question: `Wat zou jij doen wanneer een facebook-vriend iets post waar je niet mee akkoord gaat?`,
         answers: {
             A: [`Lezen en reageren met open mind`, 1],
             B: [`Sarcastisch reageren en misschien zelfs blokkeren`, -1],
@@ -64,7 +64,7 @@ const allQuestions = [
         },
     },
     {
-        question: `A friend has posted this article on facebook. It already has a lot of likes and comments, however, you strongly disagree. What's going to be your first reaction?`,
+        question: `Maak jij ooit wel eens gebruik van een browser zoals Duck Duck Go, Brave of Search encrypt??`,
         answers: {
             A: [`Zo goed als altijd`, 1],
             B: [`Af en toe wel eens`, 0],
@@ -73,7 +73,7 @@ const allQuestions = [
         },
     },
     {
-        question: `How many different browsers do you use on regular base?`,
+        question: `Hoe vaak verwijder jij cookies?`,
         answers: {
             A: [`Kan dat dan?`, -1],
             B: [`1 a 5 keer per jaar`, 0],
