@@ -206,6 +206,7 @@ const checkBothPlayers = (player, key) => {
     }
 }
 
+
 const checkButton = (event) => {
     if (event == 75) {
         showResults(allQuestions, "A", 2);
@@ -341,10 +342,12 @@ board.on("ready", function () {
 
 const init = () => {
     document.addEventListener('keydown', function (event) {
-        if (event.keyCode == 75 || event.keyCode == 76 || event.keyCode == 77) {
-            checkBothPlayers(2, event.keyCode);
-        } else if (event.keyCode == 81 || event.keyCode == 83 || event.keyCode == 68) {
-            checkBothPlayers(1, event.keyCode);
+        if (showAnswers) {
+            if (event.keyCode == 75 || event.keyCode == 76 || event.keyCode == 77) {
+                checkBothPlayers(2, event.keyCode);
+            } else if (event.keyCode == 81 || event.keyCode == 83 || event.keyCode == 68) {
+                checkBothPlayers(1, event.keyCode);
+            }
         }
     });
 }
