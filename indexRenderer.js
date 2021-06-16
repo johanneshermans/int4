@@ -10,7 +10,7 @@ const loops = [[true, 29], [true, 79], [true, 110], [true, 120], [true, 130], [t
 const audioPlays = [false, false, false]
 let loopCounter = 0;
 let introDone = false;
-
+let startVideo = false
 let introAudio;
 
 
@@ -40,8 +40,6 @@ const drawLoop = () => {
       ipc.send('rep');
     }
   }
-  console.log(loopCounter);
-  console.log(audioPlays[loopCounter]);
 
   if (loopCounter > 0) {
     if (vidTime > loops[loopCounter - 1][1] + 1.5 && !audioPlays[loopCounter]) {
@@ -62,8 +60,17 @@ const startAudio = () => {
 
 
 const init = () => {
-  startAudio();
-  drawLoop();
+  
+
+  document.addEventListener('keydown', function (event) {
+    console.log(event.keyCode)
+    if (event.keyCode == 32 && !startVideo) {
+      startVideo = true;
+      startAudio();
+      drawLoop();
+    }
+  });
+
 }
 
 init()

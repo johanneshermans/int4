@@ -108,7 +108,7 @@ board.on("ready", function () {
 
     // Just like DOM-ready for web developers.
     strip.on("ready", function () {
-        strip.color('#F00');
+        strip.color('#FF0C30');
         strip.show();
     });
 }); */
@@ -213,33 +213,26 @@ const checkBothPlayers = (player, key) => {
 }
 
 const checkButton = (event) => {
-    if (event == 65) {
+    if (event == 75) {
         showResults(allQuestions, "A", 1);
     }
-    else if (event == 90) {
+    else if (event == 76) {
         showResults(allQuestions, "B", 1);
     }
-    else if (event == 69) {
+    else if (event == 77) {
         showResults(allQuestions, "C", 1);
     }
     else if (event == 81) {
-        showResults(allQuestions, "A", 2);
+        showResults(allQuestions, "A", 1);
     }
     else if (event == 83) {
-        showResults(allQuestions, "B", 2);
+        showResults(allQuestions, "B", 1);
     }
     else if (event == 68) {
-        showResults(allQuestions, "C", 2);
+        showResults(allQuestions, "C", 1);
     }
 }
 
-const rgbToHex = (rgb) => {
-    let hex = Number(rgb).toString(16);
-    if (hex.length < 2) {
-        hex = "0" + hex;
-    }
-    return hex;
-}
 
 var board = new five.Board({
     repl: false
@@ -281,7 +274,7 @@ const updateStrip = () => {
         }
     }
     usedLedsRed.forEach(element => {
-        strip.pixel(element).color('#F00');
+        strip.pixel(element).color('#FF0C30');
     });
 
     if (lengthScore2 > usedLedsBlue.length) {
@@ -303,7 +296,7 @@ const updateStrip = () => {
         }
     }
     usedLedsBlue.forEach(element => {
-        strip.pixel(element).color('#00F');
+        strip.pixel(element).color('#1676E1');
     });
     strip.show();
 
@@ -333,7 +326,7 @@ board.on("ready", function () {
         //gespleten
         for (let i = 0; i < splitLength; i++) {
             if (i > splitLength - lengthScore1) {
-                strip.pixel(i).color('#F00');
+                strip.pixel(i).color('#FF0C30');
             } else {
                 strip.pixel(i).color('#000');
             }
@@ -341,7 +334,7 @@ board.on("ready", function () {
 
         for (let i = splitLength; i < (splitLength * 2); i++) {
             if (i < lengthScore2 + splitLength) {
-                strip.pixel(i).color('#00F');
+                strip.pixel(i).color('#1676E1');
             } else {
                 strip.pixel(i).color('#000');
             }
@@ -354,10 +347,10 @@ board.on("ready", function () {
 
 const init = () => {
     document.addEventListener('keydown', function (event) {
-        if (event.keyCode == 65 || event.keyCode == 90 || event.keyCode == 69) {
-            checkBothPlayers(1, event.keyCode);
-        } else if (event.keyCode == 81 || event.keyCode == 83 || event.keyCode == 68) {
+        if (event.keyCode == 75 || event.keyCode == 76 || event.keyCode == 77) {
             checkBothPlayers(2, event.keyCode);
+        } else if (event.keyCode == 81 || event.keyCode == 83 || event.keyCode == 68) {
+            checkBothPlayers(1, event.keyCode);
         }
     });
 }
