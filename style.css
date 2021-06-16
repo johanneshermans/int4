@@ -12,7 +12,7 @@
 
 
 html{
-    background-color: black;
+    background: url('./static/background_black.png');
     color: white;
     overflow: hidden;
     font-family: 'Work Sans', sans-serif;
