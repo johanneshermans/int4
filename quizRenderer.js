@@ -25,17 +25,17 @@ const allQuestions = [
     {
         question: `Have you ever heard about the Filter Bubble?`,
         answers: {
-            A: [`Yes`, 1],
-            B: [`I'm not sure`, 0],
-            C: [`Definitely not`, -1]
+            A: [`Ja`, 1],
+            B: [`Wel eens van gehoord`, 0],
+            C: [`Nog nooit`, -1]
         },
     },
     {
         question: `When you're planning on watching a show or movie on your streaming service, how do you choose (mostly) what movie you want to see?`,
         answers: {
-            A: [`I actually don't have a streaming service...`, 1],
-            B: [`I scroll through my feed and watch whatever I know I'll enjoy.`, -1],
-            C: [`I'll probably search for a specific series of movie that a friend recommended to me.`, 1]
+            A: [`Iets onder mijn recommendations`, -1],
+            B: [`Iets wat een vriend me heeft aangeraden`, 1],
+            C: [`Iets met positieve reviews`, 1]
         },
     },
     {
@@ -142,6 +142,8 @@ const showQuestions = (questions, quizContainer) => {
 }
 
 const handleQuestions = () => {
+    console.log('speler 1; ' + playerOne);
+    console.log('speler 2: ' + playerTwo)
     console.log(showAnswers)
     if (showAnswers === false) {
         quizContainer.style.display = "none"
@@ -223,13 +225,13 @@ const checkButton = (event) => {
         showResults(allQuestions, "C", 1);
     }
     else if (event == 81) {
-        showResults(allQuestions, "A", 1);
+        showResults(allQuestions, "A", 2);
     }
     else if (event == 83) {
-        showResults(allQuestions, "B", 1);
+        showResults(allQuestions, "B", 2);
     }
     else if (event == 68) {
-        showResults(allQuestions, "C", 1);
+        showResults(allQuestions, "C", 2);
     }
 }
 
