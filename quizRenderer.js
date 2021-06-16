@@ -208,22 +208,22 @@ const checkBothPlayers = (player, key) => {
 
 const checkButton = (event) => {
     if (event == 75) {
-        showResults(allQuestions, "A", 1);
-    }
-    else if (event == 76) {
-        showResults(allQuestions, "B", 1);
-    }
-    else if (event == 77) {
-        showResults(allQuestions, "C", 1);
-    }
-    else if (event == 81) {
         showResults(allQuestions, "A", 2);
     }
-    else if (event == 83) {
+    else if (event == 76) {
         showResults(allQuestions, "B", 2);
     }
-    else if (event == 68) {
+    else if (event == 77) {
         showResults(allQuestions, "C", 2);
+    }
+    else if (event == 81) {
+        showResults(allQuestions, "A", 1);
+    }
+    else if (event == 83) {
+        showResults(allQuestions, "B", 1);
+    }
+    else if (event == 68) {
+        showResults(allQuestions, "C", 1);
     }
 }
 
