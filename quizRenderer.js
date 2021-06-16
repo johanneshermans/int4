@@ -149,6 +149,7 @@ const handleQuestions = () => {
     } else if (showAnswers === true) {
         nothing.style.display = "none"
         quizContainer.style.display = "block"
+        quizContainer.classList.add("fade-in")
     }
 }
 
