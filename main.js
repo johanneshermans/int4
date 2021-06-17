@@ -13,6 +13,7 @@ const url = require('url')
 let mainWindow
 let quizWindow
 
+
 ipc.on('reply', (event, message) => {
     console.log(event, message);
     mainWindow.webContents.send('messageFromMain', false);

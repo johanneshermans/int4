@@ -23,70 +23,62 @@ ipc.on('messageFromSecond', (event, message) => {
 
 const allQuestions = [
     {
-        question: `Have you ever heard about the Filter Bubble?`,
+        question: `Heb je ooit gehoord over de filter bubbel?`,
         answers: {
-            A: [`Yes`, 1],
-            B: [`I'm not sure`, 0],
-            C: [`Definitely not`, -1]
+            A: [`Ja`, 1],
+            B: [`Wel eens van gehoord`, 0],
+            C: [`Nog nooit`, -1]
         },
     },
     {
-        question: `When you're planning on watching a show or movie on your streaming service, how do you choose (mostly) what movie you want to see?`,
+        question: `Hoe kies jij welke film, serie of show je gaat kijken?`,
         answers: {
-            A: [`I actually don't have a streaming service...`, 1],
-            B: [`I scroll through my feed and watch whatever I know I'll enjoy.`, -1],
-            C: [`I'll probably search for a specific series of movie that a friend recommended to me.`, 1]
+            A: [`Iets onder mijn recommendations`, -1],
+            B: [`Iets wat een vriend me heeft aangeraden`, 1],
+            C: [`Iets met positieve reviews`, 1]
         },
     },
     {
-        question: `So, what do YOU do when a website asks you to accept cookies?`,
+        question: `Wat doe jij wanneer een website je vraagt hun cookies te accepteren?`,
         answers: {
-            A: [`I just click "Accept".`, -1],
-            B: [`If possible, I select the information that I'll give them.`, 0],
-            C: [`I'll always press "Cancel".`, 1]
+            A: [`Accepteren`, -1],
+            B: [`Opties selecteren`, 0],
+            C: [`Weigeren`, 1]
         },
     },
     {
-        question: `And how often do you clear your cookies or search history?`,
+        question: `Wat zou jij doen als je een entertainend, choquerend artikel leest?`,
         answers: {
-            A: [`Urm... should I do that?`, -1],
-            B: [`About 1 to 5 times per year.`, 0],
-            C: [`Certainly more than 5 times each year.`, 1]
+            A: [`Delen zonder twijfel`, -1],
+            B: [`Kijken of de nieuwsbron betrouwbaar lijkt`, 0],
+            C: [`Controleren met meerdere bronnen`, 1]
         },
     },
     {
-        question: `Let's take this article for example. A friend has posted it on facebook, where you saw it pop up in your feed. It already has a lot of likes and comments, and quite frankly, you really liked reading that article too, so you want to share it as well. What would you do?`,
+        question: `Wat zou jij doen wanneer een facebook-vriend iets post waar je niet mee akkoord gaat?`,
         answers: {
-            A: [`I'll always check multiple other sources before sharing.`, 1],
-            B: [`I'd just post it without asking many questions.`, -1],
-            C: [`If I'm questioning the articles plausibility, I'll first do a fact-check.`, 0]
+            A: [`Lezen en reageren met open mind`, 1],
+            B: [`Sarcastisch reageren en misschien zelfs blokkeren`, -1],
+            C: [`Ogen rollen en verder scrollen`, 0]
 
         },
     },
     {
-        question: `A friend has posted this article on facebook. It already has a lot of likes and comments, however, you strongly disagree. What's going to be your first reaction?`,
+        question: `Maak jij ooit wel eens gebruik van een browser zoals Duck Duck Go, Brave of Search encrypt??`,
         answers: {
-            A: [`I'll read the comments with an open mind and may leave a comment myself.`, 1],
-            B: [`I'll roll my eyes and keep on scrolling.`, 0],
-            C: [`I'll leave an ironic comment and might even unfriend him afterwards.`, -1]
+            A: [`Zo goed als altijd`, 1],
+            B: [`Af en toe wel eens`, 0],
+            C: [`Nog nooit van gehoord`, -1]
 
         },
     },
     {
-        question: `How many different browsers do you use on regular base?`,
+        question: `Hoe vaak verwijder jij cookies?`,
         answers: {
-            A: [`just 1`, -1],
-            B: [`2`, 0],
-            C: [`more than 2`, 1]
+            A: [`Kan dat dan?`, -1],
+            B: [`1 a 5 keer per jaar`, 0],
+            C: [`meer dan 5 keer per jaar`, 1]
 
-        },
-    },
-    {
-        question: `How often do you watch the news on tv or listen on the radio?`,
-        answers: {
-            A: [`I'll actively go watch the news frequently.`, 1],
-            B: [`I won't switch channels if it pops up, but I won't go looking for it either.`, 0],
-            C: [`I avoid having to hear or watch the news.`, -1],
         },
     }
 ];
@@ -120,6 +112,8 @@ const showQuestions = (questions, quizContainer) => {
 }
 
 const handleQuestions = () => {
+    console.log('speler 1; ' + playerOne);
+    console.log('speler 2: ' + playerTwo)
     console.log(showAnswers)
     if (showAnswers === false) {
         quizContainer.style.display = "none"
@@ -190,15 +184,16 @@ const checkBothPlayers = (player, key) => {
     }
 }
 
+
 const checkButton = (event) => {
     if (event == 75) {
-        showResults(allQuestions, "A", 1);
+        showResults(allQuestions, "A", 2);
     }
     else if (event == 76) {
-        showResults(allQuestions, "B", 1);
+        showResults(allQuestions, "B", 2);
     }
     else if (event == 77) {
-        showResults(allQuestions, "C", 1);
+        showResults(allQuestions, "C", 2);
     }
     else if (event == 81) {
         showResults(allQuestions, "A", 1);
@@ -325,10 +320,12 @@ board.on("ready", function () {
 
 const init = () => {
     document.addEventListener('keydown', function (event) {
-        if (event.keyCode == 75 || event.keyCode == 76 || event.keyCode == 77) {
-            checkBothPlayers(2, event.keyCode);
-        } else if (event.keyCode == 81 || event.keyCode == 83 || event.keyCode == 68) {
-            checkBothPlayers(1, event.keyCode);
+        if (showAnswers) {
+            if (event.keyCode == 75 || event.keyCode == 76 || event.keyCode == 77) {
+                checkBothPlayers(2, event.keyCode);
+            } else if (event.keyCode == 81 || event.keyCode == 83 || event.keyCode == 68) {
+                checkBothPlayers(1, event.keyCode);
+            }
         }
     });
 }
