@@ -92,28 +92,6 @@ const allQuestions = [
 ];
 
 
-/* const board = new five.Board({
-    repl: false
-});
-
-board.on("ready", function () {
-    // Define our hardware.
-    // It's a 12px ring connected to pin 6.
-    strip = new pixel.Strip({
-        board: this,
-        controller: "FIRMATA",
-        strips: [{ pin: 7, length: 216 }],
-        gamma: 2.8,
-    });
-
-    // Just like DOM-ready for web developers.
-    strip.on("ready", function () {
-        strip.color('#FF0C30');
-        strip.show();
-    });
-}); */
-
-
 
 const showQuestions = (questions, quizContainer) => {
     const output = [];
