@@ -42,7 +42,7 @@ function createWindow() {
     }))
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools()
+    //mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -71,7 +71,7 @@ function createQuiz() {
     }))
 
     // Open the DevTools.
-    quizWindow.webContents.openDevTools()
+    //quizWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.
     quizWindow.on('closed', function () {

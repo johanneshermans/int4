@@ -169,7 +169,8 @@ const checkBothPlayers = (player, key) => {
     const existsKey = bothPlayers.includes(player);
     if (existsKey == false) {
         bothPlayers.push(player);
-        checkButton(key)
+        //checkButton(key)
+        showResults(allQuestions, key, player);
     }
     const pOne = bothPlayers.includes(1)
     const pTwo = bothPlayers.includes(2);
@@ -185,7 +186,7 @@ const checkBothPlayers = (player, key) => {
 }
 
 
-const checkButton = (event) => {
+/* const checkButton = (event) => {
     if (event == 75) {
         showResults(allQuestions, "A", 2);
     }
@@ -204,7 +205,7 @@ const checkButton = (event) => {
     else if (event == 68) {
         showResults(allQuestions, "C", 1);
     }
-}
+} */
 
 
 var board = new five.Board({
@@ -252,7 +253,7 @@ const updateStrip = () => {
 
     if (lengthScore2 > usedLedsBlue.length) {
         const loopTimes = usedLedsBlue.length
-        for (let i = 0; i < lengthScore1 - loopTimes; i++) {
+        for (let i = 0; i < lengthScore2 - loopTimes; i++) {
             const randomInt = Math.floor(Math.random() * splitLength + splitLength);
             if (!usedLedsBlue.includes(randomInt)) {
                 usedLedsBlue.push(randomInt);
@@ -261,7 +262,7 @@ const updateStrip = () => {
             }
         }
     } else if (lengthScore2 < usedLedsBlue.length) {
-        for (let i = 0; i < usedLedsBlue.length - lengthScore1; i++) {
+        for (let i = 0; i < usedLedsBlue.length - lengthScore2; i++) {
             const randomInt = Math.floor(Math.random() * (usedLedsBlue.length - 1));
             strip.pixel(usedLedsBlue[randomInt]).color('#000');
             usedLedsBlue.splice(randomInt, 1);
@@ -278,6 +279,57 @@ const updateStrip = () => {
 
 //BOARD
 board.on("ready", function () {
+    let happendOne = false
+    let happendTwo = false
+
+    var pinOne = new five.Pin({
+        pin: "A0"
+    });
+
+    var pinTwo = new five.Pin({
+        pin: "A1"
+    });
+
+    pinOne.read(function (value) {
+        if (value > 600 && value < 750 && happendOne == false) {
+            console.log("yellowOne");
+            happendOne = true;
+            checkBothPlayers(1, "B");
+            setTimeout(() => { happendOne = false }, 1000);
+        } else if (value > 300 && value < 400 && happendOne == false) {
+            console.log("blueOne");
+            happendOne = true;
+            checkBothPlayers(1, "C");
+            setTimeout(() => { happendOne = false }, 1000);
+        }
+        else if (value > 950 && value < 1500 && happendOne == false) {
+            console.log("redOne");
+            happendOne = true;
+            checkBothPlayers(1, "A");
+            setTimeout(() => { happendOne = false }, 1000);
+        }
+    });
+
+    pinTwo.read(function (value) {
+        if (value > 600 && value < 750 && happendTwo == false) {
+            console.log("yellowTwo");
+            happendTwo = true;
+            checkBothPlayers(2, "B");
+            setTimeout(() => { happendTwo = false }, 1000);
+        } else if (value > 300 && value < 400 && happendTwo == false) {
+            console.log("blueTwo");
+            happendTwo = true;
+            checkBothPlayers(2, "C");
+            setTimeout(() => { happendTwo = false }, 1000);
+        }
+        else if (value > 950 && value < 1500 && happendTwo == false) {
+            console.log("redTwo");
+            happendTwo = true;
+            checkBothPlayers(2, "A");
+            setTimeout(() => { happendTwo = false }, 1000);
+        }
+    });
+
 
     strip = new pixel.Strip({
         board: this,
@@ -285,6 +337,12 @@ board.on("ready", function () {
         strips: [{ pin: 7, length: 216 },],
         gamma: 2.8,
     });
+
+    const ledOne = new five.Led(5);
+    ledOne.blink();
+
+    const ledTwo = new five.Led(4);
+    ledTwo.blink();
 
     const splitLength = strip.length / 2;
     console.log(splitLength);
