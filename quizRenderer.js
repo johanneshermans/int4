@@ -119,6 +119,7 @@ const handleQuestions = () => {
         quizContainer.style.display = "none"
         nothing.style.display = "block"
     } else if (showAnswers === true) {
+        ledOn();
         nothing.style.display = "none"
         quizContainer.style.display = "block"
         quizContainer.classList.add("fade-in")
@@ -177,6 +178,7 @@ const checkBothPlayers = (player, key) => {
     if (pOne === true && pTwo === true) {
         bothPlayers = [];
         showAnswers = false;
+        ledOff()
         handleQuestions();
         q++
         handleHiddenQuestion();
@@ -212,12 +214,29 @@ var board = new five.Board({
     repl: false
 });
 var strip = null;
+var ledOne = null;
+var ledTwo = null
 
 //VARIABELEN
 const aantalVragen = 7;
 let usedLedsBlue = [];
 let usedLedsRed = [];
 
+
+
+const ledOn = () => {
+    ledOne = new five.Led(5);
+    ledTwo = new five.Led(4);
+    ledOne.on();
+    ledTwo.on();
+}
+
+const ledOff = () => {
+    ledOne = new five.Led(5);
+    ledTwo = new five.Led(4);
+    ledOne.off();
+    ledTwo.off();
+}
 
 const updateStrip = () => {
     strip.color('#000000');
@@ -290,7 +309,8 @@ board.on("ready", function () {
         pin: "A1"
     });
 
-    pinOne.read(function (value) {
+    pinOne.read(function (error, value) {
+        console.log(value)
         if (value > 600 && value < 750 && happendOne == false) {
             console.log("yellowOne");
             happendOne = true;
@@ -310,25 +330,28 @@ board.on("ready", function () {
         }
     });
 
-    pinTwo.read(function (value) {
+    pinTwo.read(function (error, value) {
+        console.log(value)
         if (value > 600 && value < 750 && happendTwo == false) {
-            console.log("yellowTwo");
+            console.log("yellowT");
             happendTwo = true;
             checkBothPlayers(2, "B");
             setTimeout(() => { happendTwo = false }, 1000);
         } else if (value > 300 && value < 400 && happendTwo == false) {
-            console.log("blueTwo");
+            console.log("blueT");
             happendTwo = true;
             checkBothPlayers(2, "C");
             setTimeout(() => { happendTwo = false }, 1000);
         }
         else if (value > 950 && value < 1500 && happendTwo == false) {
-            console.log("redTwo");
+            console.log("redT");
             happendTwo = true;
             checkBothPlayers(2, "A");
             setTimeout(() => { happendTwo = false }, 1000);
         }
     });
+
+
 
 
     strip = new pixel.Strip({
@@ -338,11 +361,7 @@ board.on("ready", function () {
         gamma: 2.8,
     });
 
-    const ledOne = new five.Led(5);
-    ledOne.blink();
 
-    const ledTwo = new five.Led(4);
-    ledTwo.blink();
 
     const splitLength = strip.length / 2;
     console.log(splitLength);
