@@ -60,15 +60,18 @@ const startAudio = () => {
 
 
 const init = () => {
-
-  document.addEventListener('keydown', function (event) {
+  startVideo = true;
+  startAudio();
+  drawLoop();
+  /*document.addEventListener('keydown', function (event) {
+    
     console.log(event.keyCode)
     if (event.keyCode == 32 && !startVideo) {
       startVideo = true;
       startAudio();
       drawLoop();
     }
-  });
+  });*/
 
 }
 

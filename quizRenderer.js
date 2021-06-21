@@ -25,63 +25,71 @@ const allQuestions = [
     {
         question: `Heb je ooit gehoord over de filter bubbel?`,
         answers: {
-            A: [`Ja`, 1],
-            B: [`Wel eens van gehoord`, 0],
-            C: [`Nog nooit`, -1]
+            A: [`Ja`, 2],
+            B: [`Wel eens van gehoord`, 1],
+            C: [`Nog nooit`, 0]
         },
     },
     {
         question: `Hoe kies jij welke film, serie of show je gaat kijken?`,
         answers: {
-            A: [`Iets onder mijn recommendations`, -1],
-            B: [`Iets wat een vriend me heeft aangeraden`, 1],
+            A: [`Iets onder mijn recommendations`, 0],
+            B: [`Iets wat een vriend me heeft aangeraden`, 2],
             C: [`Iets met positieve reviews`, 1]
         },
     },
     {
         question: `Wat doe jij wanneer een website je vraagt hun cookies te accepteren?`,
         answers: {
-            A: [`Accepteren`, -1],
-            B: [`Opties selecteren`, 0],
+            A: [`Accepteren`, 0],
+            B: [`Opties selecteren`, 2],
             C: [`Weigeren`, 1]
         },
     },
     {
         question: `Wat zou jij doen als je een entertainend, choquerend artikel leest?`,
         answers: {
-            A: [`Delen zonder twijfel`, -1],
-            B: [`Kijken of de nieuwsbron betrouwbaar lijkt`, 0],
-            C: [`Controleren met meerdere bronnen`, 1]
+            A: [`Delen zonder twijfel`, 0],
+            B: [`Kijken of de nieuwsbron betrouwbaar lijkt`, 1],
+            C: [`Controleren met meerdere bronnen`, 2]
         },
     },
     {
         question: `Wat zou jij doen wanneer een facebook-vriend iets post waar je niet mee akkoord gaat?`,
         answers: {
-            A: [`Lezen en reageren met open mind`, 1],
-            B: [`Sarcastisch reageren en misschien zelfs blokkeren`, -1],
-            C: [`Ogen rollen en verder scrollen`, 0]
+            A: [`Lezen en reageren met open mind`, 2],
+            B: [`Sarcastisch reageren en misschien zelfs blokkeren`, 0],
+            C: [`Ogen rollen en verder scrollen`, 1]
 
         },
     },
     {
         question: `Maak jij ooit wel eens gebruik van een browser zoals Duck Duck Go, Brave of Search encrypt??`,
         answers: {
-            A: [`Zo goed als altijd`, 1],
-            B: [`Af en toe wel eens`, 0],
-            C: [`Nog nooit van gehoord`, -1]
+            A: [`Zo goed als altijd`, 2],
+            B: [`Af en toe wel eens`, 1],
+            C: [`Nog nooit van gehoord`, 0]
 
         },
     },
     {
         question: `Hoe vaak verwijder jij cookies?`,
         answers: {
-            A: [`Kan dat dan?`, -1],
-            B: [`1 a 5 keer per jaar`, 0],
-            C: [`meer dan 5 keer per jaar`, 1]
+            A: [`Kan dat dan?`, 0],
+            B: [`1 a 5 keer per jaar`, 1],
+            C: [`meer dan 5 keer per jaar`, 2]
 
         },
     }
 ];
+
+
+var board = new five.Board({
+    repl: false
+});
+var strip = null;
+var ledOne = null;
+var ledTwo = null;
 
 
 
@@ -111,15 +119,45 @@ const showQuestions = (questions, quizContainer) => {
     quizContainer.innerHTML = output.join('');
 }
 
+const ledOn = (led) => {
+    if (led === 'ledOne') {
+        ledOne = new five.Led(4);
+        ledOne.on();
+    } else if (led === 'ledTwo') {
+        ledTwo = new five.Led(5);
+        ledTwo.on();
+    }
+}
+
+const ledOff = (led) => {
+    if (led === 'ledOne') {
+        ledOne = new five.Led(4);
+        ledOne.off();
+    } else if (led === 'ledTwo') {
+        ledTwo = new five.Led(5);
+        ledTwo.off();
+    }
+
+}
+
 const handleQuestions = () => {
-    console.log('speler 1; ' + playerOne);
-    console.log('speler 2: ' + playerTwo)
-    console.log(showAnswers)
+    //console.log('speler 1; ' + playerOne);
+    //console.log('speler 2: ' + playerTwo);
+    console.log('speler 1: ' + scoreOne)
+    console.log('speler 2: ' + scoreTwo)
+    //console.log(showAnswers)
     if (showAnswers === false) {
         quizContainer.style.display = "none"
         nothing.style.display = "block"
     } else if (showAnswers === true) {
-        ledOn();
+        if (!bothPlayers.includes(1)) {
+            ledOn('ledOne')
+        }
+
+        if (!bothPlayers.includes(2)) {
+            ledOn('ledTwo');
+        }
+        console.log(bothPlayers);
         nothing.style.display = "none"
         quizContainer.style.display = "block"
         quizContainer.classList.add("fade-in")
@@ -127,19 +165,21 @@ const handleQuestions = () => {
 }
 
 const showResults = (questions, key, player) => {
-    const singleScore = questions[q].answers[key][1];
+    let singleScore = questions[q].answers[key][1];
     if (player === 1) {
+        if (playerOne + singleScore < 0) {
+            singleScore = 0;
+        }
         scoreOne.push(singleScore)
         playerOne = scoreOne.reduce((a, b) => a + b, 0);
-        if (playerOne < 0) {
-            playerOne = 0;
-        }
+       
     } else if (player === 2) {
+        if (playerTwo + singleScore < 0) {
+            singleScore = 0;
+        }
         scoreTwo.push(singleScore)
         playerTwo = scoreTwo.reduce((a, b) => a + b, 0);
-        if (playerTwo < 0) {
-            playerTwo = 0;
-        }
+      
     }
 }
 
@@ -175,10 +215,17 @@ const checkBothPlayers = (player, key) => {
     }
     const pOne = bothPlayers.includes(1)
     const pTwo = bothPlayers.includes(2);
-    if (pOne === true && pTwo === true) {
+
+    console.log(bothPlayers);
+    if (pOne) {
+        ledOff('ledOne');
+    }
+    if (pTwo) {
+        ledOff('ledTwo');
+    }
+    if (pOne && pTwo) {
         bothPlayers = [];
         showAnswers = false;
-        ledOff()
         handleQuestions();
         q++
         handleHiddenQuestion();
@@ -188,69 +235,36 @@ const checkBothPlayers = (player, key) => {
 }
 
 
-/* const checkButton = (event) => {
-    if (event == 75) {
-        showResults(allQuestions, "A", 2);
-    }
-    else if (event == 76) {
-        showResults(allQuestions, "B", 2);
-    }
-    else if (event == 77) {
-        showResults(allQuestions, "C", 2);
-    }
-    else if (event == 81) {
-        showResults(allQuestions, "A", 1);
-    }
-    else if (event == 83) {
-        showResults(allQuestions, "B", 1);
-    }
-    else if (event == 68) {
-        showResults(allQuestions, "C", 1);
-    }
-} */
-
-
-var board = new five.Board({
-    repl: false
-});
-var strip = null;
-var ledOne = null;
-var ledTwo = null
-
 //VARIABELEN
-const aantalVragen = 7;
+const aantalPunten = allQuestions.length * 2;
+console.log('Aantal punten die kunnen behaald worden: ' + aantalPunten);
+
+// blauwe ledjes die nu branden
 let usedLedsBlue = [];
+
+// rode ledjes die nu branden
 let usedLedsRed = [];
 
 
 
-const ledOn = () => {
-    ledOne = new five.Led(5);
-    ledTwo = new five.Led(4);
-    ledOne.on();
-    ledTwo.on();
-}
-
-const ledOff = () => {
-    ledOne = new five.Led(5);
-    ledTwo = new five.Led(4);
-    ledOne.off();
-    ledTwo.off();
-}
-
 const updateStrip = () => {
+    console.log('updated');
     strip.color('#000000');
-
-    console.log(playerOne);
-    console.log(playerTwo);
     const splitLength = strip.length / 2;
+    //console.log('Lengte van de halve strip: ' + splitLength);
+    const partLength = splitLength / aantalPunten;
+    //console.log('Aantal te winnen pixels voor 1 punt: ' + partLength);
 
-    const partLength = Math.round(splitLength / aantalVragen);
-    const lengthScore1 = partLength * playerOne;
-    const lengthScore2 = partLength * playerTwo;
+    //totaal aantal ledjes van speler 1 die moeten branden
+    const lengthScore1 = Math.round(partLength * playerOne);
+    //console.log('Totaal aantal ledjes van speler 1 die moeten branden: ' + lengthScore1);
+
+    //totaal aantal ledjes van speler 2 die moeten branden
+    const lengthScore2 = Math.round(partLength * playerTwo);
+    //console.log('totaal aantal ledjes van speler 2 die moeten branden: ' + lengthScore2);
 
     if (lengthScore1 > usedLedsRed.length) {
-        const loopTimes = usedLedsRed.length;
+        const loopTimes = usedLedsRed.length
         for (let i = 0; i < lengthScore1 - loopTimes; i++) {
             const randomInt = Math.floor(Math.random() * splitLength);
             if (!usedLedsRed.includes(randomInt)) {
@@ -266,6 +280,9 @@ const updateStrip = () => {
             usedLedsRed.splice(randomInt, 1);
         }
     }
+
+    //console.log('Rode lichtjes die nu branden: ' + usedLedsRed);
+    //console.log('Aantal rode lichtjes die nu branden: ' + usedLedsRed.length);
     usedLedsRed.forEach(element => {
         strip.pixel(element).color('#FF0C30');
     });
@@ -273,7 +290,7 @@ const updateStrip = () => {
     if (lengthScore2 > usedLedsBlue.length) {
         const loopTimes = usedLedsBlue.length
         for (let i = 0; i < lengthScore2 - loopTimes; i++) {
-            const randomInt = Math.floor(Math.random() * splitLength + splitLength);
+            const randomInt = Math.floor((Math.random() * splitLength) + splitLength);
             if (!usedLedsBlue.includes(randomInt)) {
                 usedLedsBlue.push(randomInt);
             } else {
@@ -288,6 +305,8 @@ const updateStrip = () => {
 
         }
     }
+    console.log('Blauwe lichtjes die nu branden: ' + usedLedsBlue);
+    console.log('Aantal blauwe lichtjes die nu branden: ' + usedLedsBlue.length);
     usedLedsBlue.forEach(element => {
         strip.pixel(element).color('#1676E1');
     });
@@ -302,52 +321,54 @@ board.on("ready", function () {
     let happendTwo = false
 
     var pinOne = new five.Pin({
-        pin: "A0"
-    });
-
-    var pinTwo = new five.Pin({
         pin: "A1"
     });
 
+    var pinTwo = new five.Pin({
+        pin: "A2"
+    });
+
     pinOne.read(function (error, value) {
-        console.log(value)
-        if (value > 600 && value < 750 && happendOne == false) {
-            console.log("yellowOne");
-            happendOne = true;
-            checkBothPlayers(1, "B");
-            setTimeout(() => { happendOne = false }, 1000);
-        } else if (value > 300 && value < 400 && happendOne == false) {
-            console.log("blueOne");
-            happendOne = true;
-            checkBothPlayers(1, "C");
-            setTimeout(() => { happendOne = false }, 1000);
-        }
-        else if (value > 950 && value < 1500 && happendOne == false) {
-            console.log("redOne");
-            happendOne = true;
-            checkBothPlayers(1, "A");
-            setTimeout(() => { happendOne = false }, 1000);
+        if (showAnswers) {
+            if (value > 600 && value < 750 && !bothPlayers.includes(1)) {
+                console.log("yellowOne");
+                happendOne = true;
+                checkBothPlayers(1, "B");
+                //setTimeout(() => { happendOne = false }, 1000);
+            } else if (value > 300 && value < 400 && !bothPlayers.includes(1)) {
+                console.log("blueOne");
+                happendOne = true;
+                checkBothPlayers(1, "C");
+                //setTimeout(() => { happendOne = false }, 1000);
+            }
+            else if (value > 1000 && value < 1500 && !bothPlayers.includes(1)) {
+                console.log("redOne");
+                happendOne = true;
+                checkBothPlayers(1, "A");
+                //setTimeout(() => { happendOne = false }, 1000);
+            }
         }
     });
 
     pinTwo.read(function (error, value) {
-        console.log(value)
-        if (value > 600 && value < 750 && happendTwo == false) {
-            console.log("yellowT");
-            happendTwo = true;
-            checkBothPlayers(2, "B");
-            setTimeout(() => { happendTwo = false }, 1000);
-        } else if (value > 300 && value < 400 && happendTwo == false) {
-            console.log("blueT");
-            happendTwo = true;
-            checkBothPlayers(2, "C");
-            setTimeout(() => { happendTwo = false }, 1000);
-        }
-        else if (value > 950 && value < 1500 && happendTwo == false) {
-            console.log("redT");
-            happendTwo = true;
-            checkBothPlayers(2, "A");
-            setTimeout(() => { happendTwo = false }, 1000);
+        if (showAnswers) {
+            if (value > 600 && value < 750 && !bothPlayers.includes(2)) {
+                console.log("yellowT");
+                happendTwo = true;
+                checkBothPlayers(2, "B");
+                //setTimeout(() => { happendTwo = false }, 1000);
+            } else if (value > 300 && value < 400 && !bothPlayers.includes(2)) {
+                console.log("blueT");
+                happendTwo = true;
+                checkBothPlayers(2, "C");
+                //setTimeout(() => { happendTwo = false }, 1000);
+            }
+            else if (value > 950 && value < 1500 && !bothPlayers.includes(2)) {
+                console.log("redT");
+                happendTwo = true;
+                checkBothPlayers(2, "A");
+                //setTimeout(() => { happendTwo = false }, 1000);
+            }
         }
     });
 
@@ -366,7 +387,7 @@ board.on("ready", function () {
     const splitLength = strip.length / 2;
     console.log(splitLength);
 
-    const partLength = Math.round(splitLength / aantalVragen);
+    const partLength = Math.round(splitLength / aantalPunten);
     const lengthScore1 = partLength * playerOne;
     const lengthScore2 = partLength * playerTwo;
 
@@ -374,7 +395,7 @@ board.on("ready", function () {
     strip.on("ready", function () {
 
         //gespleten
-        for (let i = 0; i < splitLength; i++) {
+        /*for (let i = 0; i < splitLength; i++) {
             if (i > splitLength - lengthScore1) {
                 strip.pixel(i).color('#FF0C30');
             } else {
@@ -388,22 +409,9 @@ board.on("ready", function () {
             } else {
                 strip.pixel(i).color('#000');
             }
-        }
+        }*/
         strip.color('#ff0066');
         strip.show();
     });
 
 });
-
-const init = () => {
-    document.addEventListener('keydown', function (event) {
-        if (showAnswers) {
-            if (event.keyCode == 75 || event.keyCode == 76 || event.keyCode == 77) {
-                checkBothPlayers(2, event.keyCode);
-            } else if (event.keyCode == 81 || event.keyCode == 83 || event.keyCode == 68) {
-                checkBothPlayers(1, event.keyCode);
-            }
-        }
-    });
-}
-init()
