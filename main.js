@@ -15,13 +15,15 @@ let quizWindow
 
 
 ipc.on('reply', (event, message) => {
-    console.log(event, message);
     mainWindow.webContents.send('messageFromMain', false);
 })
 
 ipc.on('rep', (event, message) => {
-    console.log(event, message);
     quizWindow.webContents.send('messageFromSecond', true);
+})
+
+ipc.on('changeStrip', (event, message) => {
+    quizWindow.webContents.send('changeStrip', message);
 })
 
 function createWindow() {

@@ -13,12 +13,26 @@ let playerTwo = 0;
 let q = 0;
 let showAnswers = false;
 
+let introduceRed = false;
+
+let introdureRedTimer = 0;
+
 
 ipc.on('messageFromSecond', (event, message) => {
     showAnswers = true;
     handleQuestions()
 });
 
+ipc.on('changeStrip', (event, message) => {
+    if (message === 'introduceRed') {
+        introduceRed = true;
+
+    } else if (message === "endingIntroduceRed") {
+        introduceRed = false;
+        updateStrip();
+    }
+
+});
 
 
 const allQuestions = [
@@ -172,14 +186,13 @@ const showResults = (questions, key, player) => {
         }
         scoreOne.push(singleScore)
         playerOne = scoreOne.reduce((a, b) => a + b, 0);
-       
+
     } else if (player === 2) {
         if (playerTwo + singleScore < 0) {
             singleScore = 0;
         }
         scoreTwo.push(singleScore)
         playerTwo = scoreTwo.reduce((a, b) => a + b, 0);
-      
     }
 }
 
@@ -245,8 +258,6 @@ let usedLedsBlue = [];
 // rode ledjes die nu branden
 let usedLedsRed = [];
 
-
-
 const updateStrip = () => {
     console.log('updated');
     strip.color('#000000');
@@ -283,9 +294,13 @@ const updateStrip = () => {
 
     //console.log('Rode lichtjes die nu branden: ' + usedLedsRed);
     //console.log('Aantal rode lichtjes die nu branden: ' + usedLedsRed.length);
-    usedLedsRed.forEach(element => {
-        strip.pixel(element).color('#FF0C30');
-    });
+    for (i = 0; i < splitLength; i++) {
+        if(usedLedsRed.includes(i)) {
+            strip.pixel(i).color('#FF0C30');
+        } else {
+            strip.pixel(i).color('#000');
+        }
+    }
 
     if (lengthScore2 > usedLedsBlue.length) {
         const loopTimes = usedLedsBlue.length
@@ -307,9 +322,13 @@ const updateStrip = () => {
     }
     console.log('Blauwe lichtjes die nu branden: ' + usedLedsBlue);
     console.log('Aantal blauwe lichtjes die nu branden: ' + usedLedsBlue.length);
-    usedLedsBlue.forEach(element => {
-        strip.pixel(element).color('#1676E1');
-    });
+    for (i = splitLength + 1; i < splitLength * 2; i++) {
+        if (usedLedsBlue.includes(i)) {
+            strip.pixel(i).color('#1676E1');
+        } else {
+            strip.pixel(i).color('#000');
+        }
+    }
     strip.show();
 
 
@@ -415,3 +434,23 @@ board.on("ready", function () {
     });
 
 });
+
+const drawloop = () => {
+
+    if (introduceRed) {
+        let splitLength = strip.length / 2;
+        introdureRedTimer++;
+
+        strip.pixel(introdureRedTimer).color('#00f');
+        if (introdureRedTimer > splitLength) {
+            introdureRedTimer = 0;
+            strip.color('#000');
+        }
+        strip.show();
+
+    }
+
+    window.requestAnimationFrame(drawloop);
+}
+
+drawloop();

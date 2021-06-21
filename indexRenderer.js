@@ -7,12 +7,17 @@
 const ipc = require('electron').ipcRenderer;
 const $vid = document.querySelector(`.video`);
 const loops = [[true, 29], [true, 79], [true, 110], [true, 120], [true, 130], [true, 140], [true, 150], [true, 160]];
-const audioPlays = [false, false, false]
+const audioPlays = [false, false, false];
+let vidTime = 0;
 let loopCounter = 0;
 let introDone = false;
 let startVideo = false
 let introAudio;
 
+let drawLoopCounter = 0
+
+let introduceRed = true;
+let endingIntroduceRed = true;
 
 ipc.on('messageFromMain', (event, message) => {
   console.log(message)
@@ -23,8 +28,16 @@ ipc.on('messageFromMain', (event, message) => {
 
 
 const drawLoop = () => {
-  if (introAudio.paused) {
+  drawLoopCounter++;
+  vidTime = $vid.currentTime;
 
+  console.log(drawLoopCounter);
+
+  if(drawLoopCounter % 4 == 0) {
+    checkTime();
+  }
+
+  if (introAudio.paused) {
     if (!introDone) {
       introDone = true;
       $vid.play();
@@ -32,7 +45,6 @@ const drawLoop = () => {
       audio.play();
     }
   }
-  const vidTime = $vid.currentTime;
   if (loops[loopCounter][0]) {
     if (vidTime > loops[loopCounter][1]) {
 
@@ -49,8 +61,17 @@ const drawLoop = () => {
       audio.play();
     }
   }
-
   window.requestAnimationFrame(drawLoop);
+}
+
+const checkTime = () => {
+  if(vidTime > 40 && introduceRed) {
+    introduceRed = false;
+    ipc.send('changeStrip', 'introduceRed');
+  } else if (vidTime > 50 && endingIntroduceRed) {
+    endingIntroduceRed = false;
+    ipc.send('changeStrip', "endingIntroduceRed");
+  }
 }
 
 const startAudio = () => {
