@@ -18,6 +18,8 @@ let drawLoopCounter = 0
 
 let introduceRed = true;
 let endingIntroduceRed = true;
+let introduceBlue = true;
+let endingIntroduceBlue = true;
 
 ipc.on('messageFromMain', (event, message) => {
   console.log(message)
@@ -71,6 +73,12 @@ const checkTime = () => {
   } else if (vidTime > 50 && endingIntroduceRed) {
     endingIntroduceRed = false;
     ipc.send('changeStrip', "endingIntroduceRed");
+  } else if (vidTime > 51 && introduceBlue) {
+    introduceBlue = false;
+    ipc.send('changeStrip', "introduceBlue");
+  } else if (vidTime > 61 && endingIntroduceBlue) {
+    endingIntroduceBlue = false;
+    ipc.send('changeStrip', "endingIntroduceBlue");
   }
 }
 

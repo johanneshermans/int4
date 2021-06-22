@@ -14,8 +14,10 @@ let q = 0;
 let showAnswers = false;
 
 let introduceRed = false;
+let introduceBlue = false;
 
-let introdureRedTimer = 0;
+let introduceRedTimer = 0;
+let introduceBlueTimer = 0;
 
 
 ipc.on('messageFromSecond', (event, message) => {
@@ -29,6 +31,11 @@ ipc.on('changeStrip', (event, message) => {
 
     } else if (message === "endingIntroduceRed") {
         introduceRed = false;
+    } else if (message === 'introduceBlue') {
+        introduceBlue = true;
+
+    } else if (message === "endingIntroduceBlue") {
+        introduceBlue = false;
         updateStrip();
     }
 
@@ -295,7 +302,7 @@ const updateStrip = () => {
     //console.log('Rode lichtjes die nu branden: ' + usedLedsRed);
     //console.log('Aantal rode lichtjes die nu branden: ' + usedLedsRed.length);
     for (i = 0; i < splitLength; i++) {
-        if(usedLedsRed.includes(i)) {
+        if (usedLedsRed.includes(i)) {
             strip.pixel(i).color('#FF0C30');
         } else {
             strip.pixel(i).color('#000');
@@ -439,11 +446,24 @@ const drawloop = () => {
 
     if (introduceRed) {
         let splitLength = strip.length / 2;
-        introdureRedTimer++;
+        introduceRedTimer++;
 
-        strip.pixel(introdureRedTimer).color('#00f');
-        if (introdureRedTimer > splitLength) {
-            introdureRedTimer = 0;
+        strip.pixel(introduceRedTimer).color('#FF0C30');
+        if (introduceRedTimer > splitLength) {
+            introduceRedTimer = 0;
+            strip.color('#000');
+        }
+        strip.show();
+
+    }
+
+    if (introduceBlue) {
+        let splitLength = strip.length / 2;
+        introduceBlueTimer++;
+
+        strip.pixel(introduceBlueTimer).color('#1676E1');
+        if (introduceBlueTimer > splitLength) {
+            introduceBlueTimer = 0;
             strip.color('#000');
         }
         strip.show();

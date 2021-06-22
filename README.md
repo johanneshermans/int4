@@ -1,41 +1,17 @@
-# electron-serialport
-An example of how to use serialport in an electron app
+Door middel van een creatieve, interactieve animatie video en een cosy sfeerzetting geven we millenials (25-38j) een homecinema-achtige ervaring om ze na te laten denken over het effect van de filter bubbel, algoritmes en nudging op hun oordelen en keuzes die ze maken.
 
-**Clone and run for a quick way to see Electron and Serialport in action.**
+Doorheen de animatie video wordt input gevraagd die ze geven door middel van (elk) 3 gekleurde knoppen. Deze input wordt gebruikt om een indicatie te geven van hoe zwaar de filterbubbel, algoritmes en nudging doorwegen in hun leven.
 
-This is a minimal Electron application based on the [Quick Start Guide](http://electron.atom.io/docs/tutorial/quick-start) within the Electron documentation.
+Ze spelen eigenlijk een soort van spel tegen elkaar. Beide personen krijgen een kleur (vb: blauw en rood). Hoe meer een persoon 'verblind' wordt door een filterbubbel, hoe minder lichtjes van die persoon zullen branden.
 
-**Use this app along with the [Electron API Demos](http://electron.atom.io/#get-started) app for API code examples to help you get started.**
+De ultieme ervaring beleef je aan de hand van een opstelling, maar deze 'game' is perfect thuis te spelen via de website! In plaats van de knoppen in de zetel kan je een keyboard gebruiken, en de licht-indicator zal vervangen worden door een meter op de website zelf.
 
-A basic Electron application needs just these files:
+Tijdens het developen van dit project zijn we op een probleem gestuit met de node versies. De node-pixel moet geïnstalleerd worden op de v14.16.1 terwijl de anderen draaien op V16. 
+Daarom geven we hieronder een klein stappenplan hoe je ons project up-and-running krijgt.
 
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
-
-You can learn more about each of these components within the [Quick Start Guide](http://electron.atom.io/docs/tutorial/quick-start).
-
-## To Use
-
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
-
-```bash
-# Clone this repository
-git clone https://github.com/serialport/electron-serialport.git
-# Go into the repository
-cd electron-serialport
-# Install dependencies
-npm install
-# Run the app
-npm start
-```
-
-Learn more about Electron and its API in the [documentation](http://electron.atom.io/docs/).
-
-## Other Example Apps
-
-For more example apps, see the
-[list of boilerplates](http://electron.atom.io/community/#boilerplates)
-created by the awesome electron community.
-
-#### License [CC0 1.0 (Public Domain)](LICENSE.md)
+1. Check je node version
+2. Als je niet op de v14.16.1 zit, switch dan naar deze of installeer deze
+3. Run ‘npm install’
+4. Switch terug naar de node versie: v16.1.0
+5. Run ’npm install’
+6. Start de app door ’npm start’
