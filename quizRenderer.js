@@ -19,6 +19,19 @@ let introduceBlue = false;
 let introduceRedTimer = 0;
 let introduceBlueTimer = 0;
 
+let introduceRedFilled = 0;
+let introduceBlueFilled = 0;
+
+let decRed = false;
+let decRedArray = [];
+
+let incRedDecBlue = false;
+let incRedDecBlueArray = [];
+
+let decAll = false;
+
+let turnOffStrip = false;
+
 
 ipc.on('messageFromSecond', (event, message) => {
     showAnswers = true;
@@ -26,17 +39,27 @@ ipc.on('messageFromSecond', (event, message) => {
 });
 
 ipc.on('changeStrip', (event, message) => {
+    console.log(message);
+
     if (message === 'introduceRed') {
+        strip.color('#000');
         introduceRed = true;
 
-    } else if (message === "endingIntroduceRed") {
-        introduceRed = false;
     } else if (message === 'introduceBlue') {
         introduceBlue = true;
 
-    } else if (message === "endingIntroduceBlue") {
-        introduceBlue = false;
-        updateStrip();
+    } else if (message === "decRed") {
+        decRed = true;
+    } else if (message === "incRedDecBlue") {
+        incRedDecBlue = true;
+        decRed = false;
+    } else if (message === "decAll") {
+        decAll = true;
+        incRedDecBlue = false;
+    } else if (message === "turnOffStrip") {
+        turnOffStrip = true;
+        decAll = false;
+        
     }
 
 });
@@ -327,8 +350,8 @@ const updateStrip = () => {
 
         }
     }
-    console.log('Blauwe lichtjes die nu branden: ' + usedLedsBlue);
-    console.log('Aantal blauwe lichtjes die nu branden: ' + usedLedsBlue.length);
+    //console.log('Blauwe lichtjes die nu branden: ' + usedLedsBlue);
+    //console.log('Aantal blauwe lichtjes die nu branden: ' + usedLedsBlue.length);
     for (i = splitLength + 1; i < splitLength * 2; i++) {
         if (usedLedsBlue.includes(i)) {
             strip.pixel(i).color('#1676E1');
@@ -444,30 +467,73 @@ board.on("ready", function () {
 
 const drawloop = () => {
 
-    if (introduceRed) {
+    if (introduceRed && introduceRedFilled < 2) {
         let splitLength = strip.length / 2;
         introduceRedTimer++;
 
         strip.pixel(introduceRedTimer).color('#FF0C30');
         if (introduceRedTimer > splitLength) {
             introduceRedTimer = 0;
-            strip.color('#000');
+            introduceRedFilled++
+
+            if(introduceRedFilled < 2) {
+            for( i = 0; i < splitLength; i++) {
+                strip.pixel(i).color('#000');
+            }
+            }
         }
         strip.show();
 
     }
 
-    if (introduceBlue) {
+    if (introduceBlue && introduceBlueFilled < 2) {
         let splitLength = strip.length / 2;
         introduceBlueTimer++;
 
-        strip.pixel(introduceBlueTimer).color('#1676E1');
+        strip.pixel(strip.length - introduceBlueTimer).color('#1676E1');
         if (introduceBlueTimer > splitLength) {
             introduceBlueTimer = 0;
-            strip.color('#000');
+            introduceBlueFilled++
+
+            if (introduceBlueFilled < 2) {
+                for (i = 0; i < splitLength; i++) {
+                    strip.pixel(i + splitLength).color('#000');
+                }
+            }
         }
         strip.show();
 
+    }
+
+    if(decRed && decRedArray.length < strip.length / 2) {
+        const randomInt = Math.floor(Math.random() * strip.length / 2);
+        if(!decRedArray.includes(randomInt)) {
+            strip.pixel(randomInt).color('#000');
+            decRedArray.push(randomInt);
+        }
+       strip.show();
+    }
+
+    if(incRedDecBlue && incRedDecBlueArray.length < strip.length / 2) {
+        const randomInt = Math.floor(Math.random() * strip.length / 2);
+        if (!incRedDecBlueArray.includes(randomInt)) {
+            strip.pixel(strip.length -1 - randomInt).color('#000');
+            incRedDecBlueArray.push(randomInt);
+            strip.pixel(randomInt).color('#FF0C30')
+        }
+        strip.show();
+    }
+
+    if(decAll) {
+        const randomInt = Math.floor(Math.random() *  strip.length / 2);
+        strip.pixel(randomInt).color('#000');
+        strip.pixel(randomInt * 2).color('#000');
+        strip.show();
+    }
+
+    if(turnOffStrip) {
+        strip.color('#000');
+        strip.show();
     }
 
     window.requestAnimationFrame(drawloop);

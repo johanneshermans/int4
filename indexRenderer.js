@@ -17,9 +17,11 @@ let introAudio;
 let drawLoopCounter = 0
 
 let introduceRed = true;
-let endingIntroduceRed = true;
 let introduceBlue = true;
-let endingIntroduceBlue = true;
+let decRed = true;
+let incRedDecBlue = true;
+let decAll = true;
+let turnOffStrip = true;
 
 ipc.on('messageFromMain', (event, message) => {
   console.log(message)
@@ -33,7 +35,7 @@ const drawLoop = () => {
   drawLoopCounter++;
   vidTime = $vid.currentTime;
 
-  console.log(drawLoopCounter);
+  //console.log(drawLoopCounter);
 
   if(drawLoopCounter % 4 == 0) {
     checkTime();
@@ -67,19 +69,39 @@ const drawLoop = () => {
 }
 
 const checkTime = () => {
-  if(vidTime > 40 && introduceRed) {
+  
+  // INTRODUCTION FIRST RED THEN BLUE
+  if(vidTime > 1 && introduceRed) {
     introduceRed = false;
     ipc.send('changeStrip', 'introduceRed');
-  } else if (vidTime > 50 && endingIntroduceRed) {
-    endingIntroduceRed = false;
-    ipc.send('changeStrip', "endingIntroduceRed");
-  } else if (vidTime > 51 && introduceBlue) {
+  }
+  
+  
+  if (vidTime > 5 && introduceBlue) {
     introduceBlue = false;
     ipc.send('changeStrip', "introduceBlue");
-  } else if (vidTime > 61 && endingIntroduceBlue) {
-    endingIntroduceBlue = false;
-    ipc.send('changeStrip', "endingIntroduceBlue");
+  } 
+
+  if (vidTime > 10 && decRed) {
+    decRed = false;
+    ipc.send('changeStrip', 'decRed');
   }
+
+  if(vidTime > 15 && incRedDecBlue) {
+    incRedDecBlue = false;
+    ipc.send('changeStrip', 'incRedDecBlue');
+  }
+
+  if (vidTime > 20 && decAll) {
+    decAll = false;
+    ipc.send('changeStrip', 'decAll');
+  }
+
+  if(vidTime > 25 && turnOffStrip) {
+    turnOffStrip = false;
+    ipc.send('changeStrip', 'turnOffStrip')
+  }
+
 }
 
 const startAudio = () => {
