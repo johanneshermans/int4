@@ -12,6 +12,10 @@ const scoreTwo = [];
 let playerTwo = 0;
 let q = 0;
 let showAnswers = false;
+let readyToStart1 = false;
+let readyToStart2 = false;
+
+let playersReady = [];
 
 let introduceRed = false;
 let introduceBlue = false;
@@ -364,10 +368,21 @@ const updateStrip = () => {
 
 }
 
+const checkBothPlayersReady = () => {
+    if(playersReady.includes(1) && playersReady.includes(2)) {
+        playersReady = [];
+        ipc.send('startExp', 'startItUp')
+    }
+}
+
 //BOARD
 board.on("ready", function () {
     let happendOne = false
     let happendTwo = false
+
+
+    ledOn('ledOne');
+    ledOn('ledTwo');
 
     var pinOne = new five.Pin({
         pin: "A1"
@@ -396,6 +411,14 @@ board.on("ready", function () {
                 checkBothPlayers(1, "A");
                 //setTimeout(() => { happendOne = false }, 1000);
             }
+        } else if (!readyToStart1) {
+            if ((value > 600 && value < 750) || (value > 300 && value < 400) || (value > 1000 && value < 1500)) {
+                ledOff('ledOne');
+                readyToStart1 = true;
+                console.log("player 1 ready");
+                playersReady.push(1);
+                checkBothPlayersReady();
+            } 
         }
     });
 
@@ -417,6 +440,14 @@ board.on("ready", function () {
                 happendTwo = true;
                 checkBothPlayers(2, "A");
                 //setTimeout(() => { happendTwo = false }, 1000);
+            }
+        } else if (!readyToStart2) {
+            if ((value > 600 && value < 750) || (value > 300 && value < 400) || (value > 1000 && value < 1500)) {
+                ledOff('ledTwo');
+                readyToStart2 = true;
+                console.log("player 2 ready");
+                playersReady.push(2);
+                checkBothPlayersReady();
             }
         }
     });
@@ -544,6 +575,7 @@ const drawloop = () => {
     }
 
     if (turnOffStrip) {
+        turnOffStrip = false;
         strip.color('#000');
         strip.show();
     }
@@ -552,6 +584,3 @@ const drawloop = () => {
 }
 
 drawloop();
-
-ledOn('ledOne');
-ledOn('ledTwo');

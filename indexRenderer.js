@@ -30,6 +30,13 @@ ipc.on('messageFromMain', (event, message) => {
   console.log(loopCounter)
 });
 
+ipc.on('startExp', (event, message) => {
+  console.log(message);
+  startVideo = true;
+  startAudio();
+  drawLoop();
+});
+
 
 const drawLoop = () => {
   drawLoopCounter++;
@@ -111,9 +118,7 @@ const startAudio = () => {
 
 
 const init = () => {
-  startVideo = true;
-  startAudio();
-  drawLoop();
+  
   /*document.addEventListener('keydown', function (event) {
     
     console.log(event.keyCode)

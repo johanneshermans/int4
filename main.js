@@ -26,6 +26,10 @@ ipc.on('changeStrip', (event, message) => {
     quizWindow.webContents.send('changeStrip', message);
 })
 
+ipc.on('startExp', (event, message) => {
+    mainWindow.webContents.send('startExp', message);
+})
+
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
