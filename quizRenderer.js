@@ -36,6 +36,9 @@ let decAll = false;
 
 let turnOffStrip = false;
 
+let intro = false;
+let introStop = false;
+
 
 ipc.on('messageFromSecond', (event, message) => {
     showAnswers = true;
@@ -64,6 +67,23 @@ ipc.on('changeStrip', (event, message) => {
         turnOffStrip = true;
         decAll = false;
 
+    } else if (message === "intro") {
+        intro = true;
+        console.log('intro');
+        for(i = 0; i < 27; i++) {
+            strip.pixel(i).color("#1676E1");
+            strip.pixel(i + strip.length / 2).color("#1676E1");
+        }
+
+        for(i = 54; i < 81; i++) {
+            strip.pixel(i).color('#FF0C30');
+            strip.pixel(i + strip.length / 2).color("#FF0C30");
+        }
+
+        strip.show();
+    } else if (message = "introStop") {
+        introStop = true;
+        intro = false;
     }
 
 });
@@ -369,8 +389,23 @@ const updateStrip = () => {
 }
 
 const checkBothPlayersReady = () => {
+    if (playersReady.includes(1)) {
+        console.log('one pressed');
+       
+        ipc.send('startExp', 'readyOne')
+
+    }
+
+    if (playersReady.includes(2)) {
+        console.log('two pressed');
+        
+        ipc.send('startExp', 'readyTwo')
+    }
+
     if(playersReady.includes(1) && playersReady.includes(2)) {
         playersReady = [];
+        const $readyText = document.querySelector(`.to-start`);
+        $readyText.style.display = "none";
         ipc.send('startExp', 'startItUp')
     }
 }
@@ -490,7 +525,7 @@ board.on("ready", function () {
                 strip.pixel(i).color('#000');
             }
         }*/
-        strip.color('#ff0066');
+        strip.color('#000');
         strip.show();
     });
 
@@ -503,12 +538,12 @@ const drawloop = () => {
         introduceRedTimer++;
 
         strip.pixel(introduceRedTimer).color('#FF0C30');
-        if (introduceRedTimer > splitLength) {
+        if (introduceRedTimer > splitLength - 2) {
             introduceRedTimer = 0;
             introduceRedFilled++
 
             if (introduceRedFilled < 1) {
-                for (i = 0; i < splitLength; i++) {
+                for (i = 0; i < splitLength - 1; i++) {
                     strip.pixel(i).color('#000');
                 }
             }
@@ -523,7 +558,7 @@ const drawloop = () => {
         introduceBlueTimer++;
 
         strip.pixel(strip.length - introduceBlueTimer).color('#1676E1');
-        if (introduceBlueTimer > splitLength) {
+        if (introduceBlueTimer > splitLength -1) {
             introduceBlueTimer = 0;
             introduceBlueFilled++
 
@@ -577,6 +612,17 @@ const drawloop = () => {
     if (turnOffStrip) {
         turnOffStrip = false;
         strip.color('#000');
+        strip.show();
+    }
+
+    if (introStop) {
+        introStop = false;
+        strip.color('#000');
+        strip.show();
+    }
+
+    if(intro) {
+        strip.shift(1, pixel.FORWARD, true);
         strip.show();
     }
 

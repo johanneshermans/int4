@@ -22,6 +22,7 @@ let decRed = true;
 let incRedDecBlue = true;
 let decAll = true;
 let turnOffStrip = true;
+let introStop = true;
 
 ipc.on('messageFromMain', (event, message) => {
   console.log(message)
@@ -32,9 +33,25 @@ ipc.on('messageFromMain', (event, message) => {
 
 ipc.on('startExp', (event, message) => {
   console.log(message);
-  startVideo = true;
-  startAudio();
-  drawLoop();
+  if(message === "startItUp") {
+    setTimeout(() => {
+      const $readyContainer = document.querySelector(`.ready__container`);
+      $readyContainer.style.display = "none";
+      startVideo = true;
+      startAudio();
+      drawLoop();
+
+      // VOICE ANIMATION STARTEN
+      ipc.send('changeStrip', 'intro');
+    }, 3000);
+    
+  } else if (message === "readyOne") {
+    const $readyText = document.querySelector(`.ready__one`);
+    $readyText.style.display = "block";
+  } else if (message === "readyTwo") {
+    const $readyText = document.querySelector(`.ready__two`);
+    $readyText.style.display = "block";
+  }
 });
 
 
@@ -78,6 +95,11 @@ const drawLoop = () => {
 const checkTime = () => {
   
   // INTRODUCTION FIRST RED THEN BLUE
+  if(vidTime > 0 && introStop) {
+    introStop = false;
+    ipc.send('changeStrip', 'introStop')
+  }
+  
   if(vidTime > 2 && introduceRed) {
     introduceRed = false;
     ipc.send('changeStrip', 'introduceRed');
