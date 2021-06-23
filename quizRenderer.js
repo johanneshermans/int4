@@ -59,7 +59,7 @@ ipc.on('changeStrip', (event, message) => {
     } else if (message === "turnOffStrip") {
         turnOffStrip = true;
         decAll = false;
-        
+
     }
 
 });
@@ -467,7 +467,7 @@ board.on("ready", function () {
 
 const drawloop = () => {
 
-    if (introduceRed && introduceRedFilled < 2) {
+    if (introduceRed && introduceRedFilled < 1) {
         let splitLength = strip.length / 2;
         introduceRedTimer++;
 
@@ -476,17 +476,18 @@ const drawloop = () => {
             introduceRedTimer = 0;
             introduceRedFilled++
 
-            if(introduceRedFilled < 2) {
-            for( i = 0; i < splitLength; i++) {
-                strip.pixel(i).color('#000');
-            }
+            if (introduceRedFilled < 1) {
+                for (i = 0; i < splitLength; i++) {
+                    strip.pixel(i).color('#000');
+                }
             }
         }
+
         strip.show();
 
     }
 
-    if (introduceBlue && introduceBlueFilled < 2) {
+    if (introduceBlue && introduceBlueFilled < 1) {
         let splitLength = strip.length / 2;
         introduceBlueTimer++;
 
@@ -495,43 +496,54 @@ const drawloop = () => {
             introduceBlueTimer = 0;
             introduceBlueFilled++
 
-            if (introduceBlueFilled < 2) {
+            if (introduceBlueFilled < 1) {
                 for (i = 0; i < splitLength; i++) {
                     strip.pixel(i + splitLength).color('#000');
                 }
             }
         }
+
+
         strip.show();
 
     }
 
-    if(decRed && decRedArray.length < strip.length / 2) {
-        const randomInt = Math.floor(Math.random() * strip.length / 2);
-        if(!decRedArray.includes(randomInt)) {
-            strip.pixel(randomInt).color('#000');
-            decRedArray.push(randomInt);
+    if (decRed && decRedArray.length < strip.length / 2) {
+
+        for (i = 0; i < 3; i++) {
+            const randomInt = Math.floor(Math.random() * strip.length / 2);
+            if (!decRedArray.includes(randomInt)) {
+                strip.pixel(randomInt).color('#000');
+                decRedArray.push(randomInt);
+            }
         }
-       strip.show();
+
+        strip.show();
     }
 
-    if(incRedDecBlue && incRedDecBlueArray.length < strip.length / 2) {
-        const randomInt = Math.floor(Math.random() * strip.length / 2);
-        if (!incRedDecBlueArray.includes(randomInt)) {
-            strip.pixel(strip.length -1 - randomInt).color('#000');
-            incRedDecBlueArray.push(randomInt);
-            strip.pixel(randomInt).color('#FF0C30')
+    if (incRedDecBlue && incRedDecBlueArray.length < strip.length / 2) {
+        for (i = 0; i < 2; i++) {
+
+            const randomInt = Math.floor(Math.random() * strip.length / 2);
+            if (!incRedDecBlueArray.includes(randomInt)) {
+                strip.pixel(strip.length - 1 - randomInt).color('#000');
+                incRedDecBlueArray.push(randomInt);
+                strip.pixel(randomInt).color('#FF0C30')
+            }
         }
         strip.show();
     }
 
-    if(decAll) {
-        const randomInt = Math.floor(Math.random() *  strip.length / 2);
+    if (decAll) {
+        for (i = 0; i < 2; i++) {
+        const randomInt = Math.floor(Math.random() * strip.length / 2);
         strip.pixel(randomInt).color('#000');
         strip.pixel(randomInt * 2).color('#000');
+        }
         strip.show();
     }
 
-    if(turnOffStrip) {
+    if (turnOffStrip) {
         strip.color('#000');
         strip.show();
     }
@@ -540,3 +552,6 @@ const drawloop = () => {
 }
 
 drawloop();
+
+ledOn('ledOne');
+ledOn('ledTwo');

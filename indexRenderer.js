@@ -71,33 +71,33 @@ const drawLoop = () => {
 const checkTime = () => {
   
   // INTRODUCTION FIRST RED THEN BLUE
-  if(vidTime > 1 && introduceRed) {
+  if(vidTime > 2 && introduceRed) {
     introduceRed = false;
     ipc.send('changeStrip', 'introduceRed');
   }
   
   
-  if (vidTime > 5 && introduceBlue) {
+  if (vidTime > 4 && introduceBlue) {
     introduceBlue = false;
     ipc.send('changeStrip', "introduceBlue");
   } 
 
-  if (vidTime > 10 && decRed) {
+  if (vidTime > 7 && decRed) {
     decRed = false;
     ipc.send('changeStrip', 'decRed');
   }
 
-  if(vidTime > 15 && incRedDecBlue) {
+  if(vidTime > 9 && incRedDecBlue) {
     incRedDecBlue = false;
     ipc.send('changeStrip', 'incRedDecBlue');
   }
 
-  if (vidTime > 20 && decAll) {
+  if (vidTime > 11 && decAll) {
     decAll = false;
     ipc.send('changeStrip', 'decAll');
   }
 
-  if(vidTime > 25 && turnOffStrip) {
+  if(vidTime > 13 && turnOffStrip) {
     turnOffStrip = false;
     ipc.send('changeStrip', 'turnOffStrip')
   }
