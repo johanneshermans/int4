@@ -11,8 +11,6 @@ let vidTime = 0;
 let loopCounter = 0;
 let optionCounter = 0;
 
-let pause = false;
-
 let drawLoopCounter = 0
 
 let introduceRed = true;
@@ -48,7 +46,7 @@ ipc.on('startExp', (event, message) => {
       $vid.currentTime = 85;
       $vid.play();
       drawLoop();
-      ipc.send('videoplay', 'videoplay');
+
       // VOICE ANIMATION STARTEN
       //ipc.send('changeStrip', 'intro');
     }, 3000);
@@ -60,17 +58,6 @@ ipc.on('startExp', (event, message) => {
     const $readyText = document.querySelector(`.ready__two`);
     $readyText.style.display = "block";
   }
-});
-
-ipc.on('pause', (event, message) => {
-  if(!pause) {
-    $vid.pause();
-    pause = true
-  } else {
-    $vid.play();
-    pause = false;
-  }
- 
 });
 
 
