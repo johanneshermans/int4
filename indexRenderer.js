@@ -6,9 +6,10 @@
 
 const ipc = require('electron').ipcRenderer;
 const $vid = document.querySelector(`.video`);
-const loops = [[true, 107], [true, 213.2], [true, 308], [true, 382], [true, 440], [true, 471]];
+const loops = [[true, 107,[91, 93, 96]], [true, 213.2, [200, 205, 208]], [true, 308, [296, 298, 302]], [true, 382, [368, 372, 376]], [true, 440, [423, 425, 430]], [true, 471, [462, 464, 466]]];
 let vidTime = 0;
 let loopCounter = 0;
+let optionCounter = 0;
 
 let drawLoopCounter = 0
 
@@ -19,12 +20,21 @@ let incRedDecBlue = true;
 let decAll = true;
 let turnOffStrip = true;
 let introStop = true;
+let fout = true;
+let foutDone = true;
+
+let aNotShown = true; 
+let bNotShown = true;
+let cNotShown = true;
 
 ipc.on('messageFromMain', (event, message) => {
   console.log(message)
   loops[loopCounter][0] = false
   loopCounter++
   console.log(loopCounter)
+  aNotShown = true;
+  bNotShown = true;
+  cNotShown = true;
 });
 
 ipc.on('startExp', (event, message) => {
@@ -33,11 +43,12 @@ ipc.on('startExp', (event, message) => {
     setTimeout(() => {
       const $readyContainer = document.querySelector(`.ready__container`);
       $readyContainer.style.display = "none";
+      $vid.currentTime = 85;
       $vid.play();
       drawLoop();
 
       // VOICE ANIMATION STARTEN
-      ipc.send('changeStrip', 'intro');
+      //ipc.send('changeStrip', 'intro');
     }, 3000);
     
   } else if (message === "readyOne") {
@@ -51,7 +62,6 @@ ipc.on('startExp', (event, message) => {
 
 
 const drawLoop = () => {
-  console.log($vid.currentTime);
   drawLoopCounter++;
   vidTime = $vid.currentTime;
 
@@ -61,10 +71,30 @@ const drawLoop = () => {
     checkTime();
   }
 
-  if (loops[loopCounter][0]) {
+  if (loops[loopCounter][0]) {    
+    if (vidTime > loops[loopCounter][2][optionCounter] && aNotShown) {
+      aNotShown = false;
+      optionCounter++;
+      ipc.send('option', 'A');
+    }
+
+    if (vidTime > loops[loopCounter][2][optionCounter] && bNotShown) {
+      bNotShown = false;
+      optionCounter++;
+      ipc.send('option', 'B');
+    }
+
+    if (vidTime > loops[loopCounter][2][optionCounter] && cNotShown) {
+      cNotShown = false;
+      optionCounter = 0;
+      ipc.send('option', 'C');
+    }
+
+    if (vidTime > loops[loopCounter][1] - 3) {
+      ipc.send('rep');
+    }
     if (vidTime > loops[loopCounter][1]) {
       $vid.currentTime = loops[loopCounter][1] - 2.9;
-      ipc.send('rep');
     }
   }
 
@@ -74,7 +104,7 @@ const drawLoop = () => {
 const checkTime = () => {
   
   // INTRODUCTION FIRST RED THEN BLUE
-  if(vidTime > 56 && introStop) {
+  /*if(vidTime > 56 && introStop) {
     introStop = false;
     ipc.send('changeStrip', 'introStop')
   }
@@ -110,6 +140,18 @@ const checkTime = () => {
     ipc.send('changeStrip', 'turnOffStrip');
     
   }
+
+  if (vidTime > 226 && fout) {
+    fout = false;
+    ipc.send('changeStrip', 'fout');
+
+  }
+
+  if (vidTime > 228 && foutDone) {
+    foutDone = false;
+    ipc.send('changeStrip', 'foutDone');
+
+  }*/
 
 }
 

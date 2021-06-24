@@ -22,6 +22,10 @@ ipc.on('rep', (event, message) => {
     quizWindow.webContents.send('messageFromSecond', true);
 })
 
+ipc.on('option', (event, message) => {
+    quizWindow.webContents.send('option', message);
+})
+
 ipc.on('changeStrip', (event, message) => {
     quizWindow.webContents.send('changeStrip', message);
 })

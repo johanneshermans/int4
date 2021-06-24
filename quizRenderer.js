@@ -14,6 +14,7 @@ let q = 0;
 let showAnswers = false;
 let readyToStart1 = false;
 let readyToStart2 = false;
+let questionCounter = 0;
 
 let playersReady = [];
 
@@ -38,6 +39,8 @@ let turnOffStrip = false;
 
 let intro = false;
 let introStop = false;
+
+let fout = false;
 
 
 ipc.on('messageFromSecond', (event, message) => {
@@ -82,9 +85,14 @@ ipc.on('changeStrip', (event, message) => {
         }
 
         strip.show();
-    } else if (message = "introStop") {
+    } else if (message === "introStop") {
         introStop = true;
         intro = false;
+    } else if (message === 'fout') {
+        fout = true;
+    } else if (message === 'foutDone') {
+        fout = false;
+        updateStrip();
     }
 
 });
@@ -154,6 +162,44 @@ var ledTwo = null;
 
 
 
+ipc.on('option', (event, message) => {
+    if (message === "A") {
+        showFirstOption();
+    } else if (message === "B") {
+        showSecondOption();
+    } else if (message === "C") {
+        showThirdOption();
+    }
+});
+
+const showFirstOption = () => {
+    console.log('first option');
+    nothing.style.display = "none"
+    quizContainer.style.display = "block"
+    const $questionContainer = document.querySelector(`.questionContainer__${questionCounter}`);
+    const $firstOption = $questionContainer.querySelector(`.questionA`);
+    $firstOption.style.display = 'block';
+    $firstOption.classList.add("fade-in");
+}
+
+const showSecondOption = () => {
+    console.log('second option')
+    const $questionContainer = document.querySelector(`.questionContainer__${questionCounter}`);
+    const $secondOption = $questionContainer.querySelector(`.questionB`);
+    $secondOption.style.display = 'block';
+    $secondOption.classList.add("fade-in");
+}
+
+const showThirdOption = () => {
+    console.log('third option');
+    const $questionContainer = document.querySelector(`.questionContainer__${questionCounter}`);
+    const $thirdOption = $questionContainer.querySelector(`.questionC`);
+    $thirdOption.style.display = 'block';
+    $thirdOption.classList.add("fade-in");
+}
+
+
+
 const showQuestions = (questions, quizContainer) => {
     const output = [];
     let answers;
@@ -164,7 +210,7 @@ const showQuestions = (questions, quizContainer) => {
         for (const letter in answ) {
 
             answers.push(
-                '<label class="question' + letter + '">'
+                '<label class="question__letter question' + letter + '">'
                 + '<input type="radio" name="question' + i + '" value="' + letter + '">'
                 + questions[i].answers[letter][0]
                 + '</label><br>'
@@ -172,8 +218,7 @@ const showQuestions = (questions, quizContainer) => {
         }
 
         output.push(
-            '<div class="questionContainer">' +
-            '<div class="question">' + questions[i].question + '</div>'
+            '<div class="questionContainer questionContainer__' +  i + '">'
             + '<div class="answers">' + answers.join('') + '</div>' + '</div>'
         );
     }
@@ -219,9 +264,7 @@ const handleQuestions = () => {
             ledOn('ledTwo');
         }
         console.log(bothPlayers);
-        nothing.style.display = "none"
-        quizContainer.style.display = "block"
-        quizContainer.classList.add("fade-in")
+       
     }
 }
 
@@ -284,6 +327,7 @@ const checkBothPlayers = (player, key) => {
         ledOff('ledTwo');
     }
     if (pOne && pTwo) {
+        questionCounter++;
         bothPlayers = [];
         showAnswers = false;
         handleQuestions();
@@ -616,6 +660,11 @@ const drawloop = () => {
 
     if(intro) {
         strip.shift(1, pixel.FORWARD, true);
+        strip.show();
+    }
+
+    if(fout) {
+        strip.color("#FF0000");
         strip.show();
     }
 
