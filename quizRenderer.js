@@ -66,6 +66,7 @@ ipc.on('changeStrip', (event, message) => {
     } else if (message === "turnOffStrip") {
         turnOffStrip = true;
         decAll = false;
+        updateStrip();
 
     } else if (message === "intro") {
         intro = true;
@@ -131,15 +132,7 @@ const allQuestions = [
 
         },
     },
-    {
-        question: `Maak jij ooit wel eens gebruik van een browser zoals Duck Duck Go, Brave of Search encrypt??`,
-        answers: {
-            A: [`Zo goed als altijd`, 2],
-            B: [`Af en toe wel eens`, 1],
-            C: [`Nog nooit van gehoord`, 0]
-
-        },
-    },
+    
     {
         question: `Hoe vaak verwijder jij cookies?`,
         answers: {

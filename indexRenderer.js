@@ -6,13 +6,9 @@
 
 const ipc = require('electron').ipcRenderer;
 const $vid = document.querySelector(`.video`);
-const loops = [[true, 29], [true, 79], [true, 110], [true, 120], [true, 130], [true, 140], [true, 150], [true, 160]];
-const audioPlays = [false, false, false];
+const loops = [[true, 107], [true, 213.2], [true, 308], [true, 382], [true, 440], [true, 471]];
 let vidTime = 0;
 let loopCounter = 0;
-let introDone = false;
-let startVideo = false
-let introAudio;
 
 let drawLoopCounter = 0
 
@@ -37,8 +33,7 @@ ipc.on('startExp', (event, message) => {
     setTimeout(() => {
       const $readyContainer = document.querySelector(`.ready__container`);
       $readyContainer.style.display = "none";
-      startVideo = true;
-      startAudio();
+      $vid.play();
       drawLoop();
 
       // VOICE ANIMATION STARTEN
@@ -56,6 +51,7 @@ ipc.on('startExp', (event, message) => {
 
 
 const drawLoop = () => {
+  console.log($vid.currentTime);
   drawLoopCounter++;
   vidTime = $vid.currentTime;
 
@@ -65,93 +61,55 @@ const drawLoop = () => {
     checkTime();
   }
 
-  if (introAudio.paused) {
-    if (!introDone) {
-      introDone = true;
-      $vid.play();
-      const audio = new Audio(`static/main${loopCounter + 1}.wav`);
-      audio.play();
-    }
-  }
   if (loops[loopCounter][0]) {
     if (vidTime > loops[loopCounter][1]) {
-
       $vid.currentTime = loops[loopCounter][1] - 2.9;
       ipc.send('rep');
     }
   }
 
-  if (loopCounter > 0) {
-    if (vidTime > loops[loopCounter - 1][1] + 1.5 && !audioPlays[loopCounter]) {
-      console.log('done');
-      audioPlays[loopCounter] = true;
-      const audio = new Audio(`static/main${loopCounter + 1}.wav`);
-      audio.play();
-    }
-  }
   window.requestAnimationFrame(drawLoop);
 }
 
 const checkTime = () => {
   
   // INTRODUCTION FIRST RED THEN BLUE
-  if(vidTime > 0 && introStop) {
+  if(vidTime > 56 && introStop) {
     introStop = false;
     ipc.send('changeStrip', 'introStop')
   }
   
-  if(vidTime > 2 && introduceRed) {
+  if(vidTime > 124 && introduceRed) {
     introduceRed = false;
     ipc.send('changeStrip', 'introduceRed');
   }
   
   
-  if (vidTime > 4 && introduceBlue) {
+  if (vidTime > 126 && introduceBlue) {
     introduceBlue = false;
     ipc.send('changeStrip', "introduceBlue");
   } 
 
-  if (vidTime > 7 && decRed) {
+  if (vidTime > 129 && decRed) {
     decRed = false;
     ipc.send('changeStrip', 'decRed');
   }
 
-  if(vidTime > 9 && incRedDecBlue) {
+  if(vidTime > 131 && incRedDecBlue) {
     incRedDecBlue = false;
     ipc.send('changeStrip', 'incRedDecBlue');
   }
 
-  if (vidTime > 11 && decAll) {
+  if (vidTime > 133 && decAll) {
     decAll = false;
     ipc.send('changeStrip', 'decAll');
   }
 
-  if(vidTime > 13 && turnOffStrip) {
+  if(vidTime > 135 && turnOffStrip) {
     turnOffStrip = false;
-    ipc.send('changeStrip', 'turnOffStrip')
+    ipc.send('changeStrip', 'turnOffStrip');
+    
   }
 
 }
-
-const startAudio = () => {
-  introAudio = new Audio(`static/intro.wav`);
-  introAudio.play();
-}
-
-
-const init = () => {
-  
-  /*document.addEventListener('keydown', function (event) {
-    
-    console.log(event.keyCode)
-    if (event.keyCode == 32 && !startVideo) {
-      startVideo = true;
-      startAudio();
-      drawLoop();
-    }
-  });*/
-
-}
-
-init()
 
