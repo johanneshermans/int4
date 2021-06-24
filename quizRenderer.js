@@ -16,6 +16,8 @@ let readyToStart1 = false;
 let readyToStart2 = false;
 let questionCounter = 0;
 
+let readytoPause = false;
+
 let playersReady = [];
 
 let introduceRed = false;
@@ -42,10 +44,17 @@ let introStop = false;
 
 let fout = false;
 
+let readyForNewActionOne = true;
+let readyForNewActionTwo = true;
+
 
 ipc.on('messageFromSecond', (event, message) => {
     showAnswers = true;
     handleQuestions()
+});
+
+ipc.on('videoplay', (event, message) => {
+   readytoPause = true;
 });
 
 ipc.on('changeStrip', (event, message) => {
@@ -74,12 +83,12 @@ ipc.on('changeStrip', (event, message) => {
     } else if (message === "intro") {
         intro = true;
         console.log('intro');
-        for(i = 0; i < 27; i++) {
+        for (i = 0; i < 27; i++) {
             strip.pixel(i).color("#1676E1");
             strip.pixel(i + strip.length / 2).color("#1676E1");
         }
 
-        for(i = 54; i < 81; i++) {
+        for (i = 54; i < 81; i++) {
             strip.pixel(i).color('#FF0C30');
             strip.pixel(i + strip.length / 2).color("#FF0C30");
         }
@@ -140,7 +149,7 @@ const allQuestions = [
 
         },
     },
-    
+
     {
         question: `Hoe vaak verwijder jij cookies?`,
         answers: {
@@ -218,7 +227,7 @@ const showQuestions = (questions, quizContainer) => {
         }
 
         output.push(
-            '<div class="questionContainer questionContainer__' +  i + '">'
+            '<div class="questionContainer questionContainer__' + i + '">'
             + '<div class="answers">' + answers.join('') + '</div>' + '</div>'
         );
     }
@@ -264,7 +273,7 @@ const handleQuestions = () => {
             ledOn('ledTwo');
         }
         console.log(bothPlayers);
-       
+
     }
 }
 
@@ -428,18 +437,18 @@ const updateStrip = () => {
 const checkBothPlayersReady = () => {
     if (playersReady.includes(1)) {
         console.log('one pressed');
-       
+
         ipc.send('startExp', 'readyOne')
 
     }
 
     if (playersReady.includes(2)) {
         console.log('two pressed');
-        
+
         ipc.send('startExp', 'readyTwo')
     }
 
-    if(playersReady.includes(1) && playersReady.includes(2)) {
+    if (playersReady.includes(1) && playersReady.includes(2)) {
         playersReady = [];
         const $readyText = document.querySelector(`.to-start`);
         $readyText.style.display = "none";
@@ -465,6 +474,7 @@ board.on("ready", function () {
     });
 
     pinOne.read(function (error, value) {
+        
         if (showAnswers) {
             if (value > 600 && value < 750 && !bothPlayers.includes(1)) {
                 console.log("yellowOne");
@@ -490,7 +500,18 @@ board.on("ready", function () {
                 console.log("player 1 ready");
                 playersReady.push(1);
                 checkBothPlayersReady();
-            } 
+            }
+        } else {
+            if ((value > 600 && value < 750) || (value > 300 && value < 400) || (value > 1000 && value < 1500) && readytoPause && readyForNewActionOne) {
+                ipc.send('pause', 'pause')
+                console.log('HAPPENS 1')
+            }
+        }
+
+        if ((value > 600 && value < 750) || (value > 300 && value < 400) || (value > 1000 && value < 1500)) {
+            readyForNewActionOne = false;
+        } else {
+            readyForNewActionOne = true;
         }
     });
 
@@ -521,6 +542,17 @@ board.on("ready", function () {
                 playersReady.push(2);
                 checkBothPlayersReady();
             }
+        } else {
+            if ((value > 600 && value < 750) || (value > 300 && value < 400) || (value > 1000 && value < 1500) && readytoPause && readyForNewActionTwo) {
+                console.log('HAPPENS 2')
+                ipc.send('pause', 'pause')
+            }
+        }
+
+        if ((value > 600 && value < 750) || (value > 300 && value < 400) || (value > 1000 && value < 1500)) {
+            readyForNewActionTwo = false;
+        } else {
+            readyForNewActionTwo = true;
         }
     });
 
@@ -595,7 +627,7 @@ const drawloop = () => {
         introduceBlueTimer++;
 
         strip.pixel(strip.length - introduceBlueTimer).color('#1676E1');
-        if (introduceBlueTimer > splitLength -1) {
+        if (introduceBlueTimer > splitLength - 1) {
             introduceBlueTimer = 0;
             introduceBlueFilled++
 
@@ -639,9 +671,9 @@ const drawloop = () => {
 
     if (decAll) {
         for (i = 0; i < 2; i++) {
-        const randomInt = Math.floor(Math.random() * strip.length / 2);
-        strip.pixel(randomInt).color('#000');
-        strip.pixel(randomInt * 2).color('#000');
+            const randomInt = Math.floor(Math.random() * strip.length / 2);
+            strip.pixel(randomInt).color('#000');
+            strip.pixel(randomInt * 2).color('#000');
         }
         strip.show();
     }
@@ -658,12 +690,12 @@ const drawloop = () => {
         strip.show();
     }
 
-    if(intro) {
+    if (intro) {
         strip.shift(1, pixel.FORWARD, true);
         strip.show();
     }
 
-    if(fout) {
+    if (fout) {
         strip.color("#FF0000");
         strip.show();
     }

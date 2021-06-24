@@ -34,6 +34,14 @@ ipc.on('startExp', (event, message) => {
     mainWindow.webContents.send('startExp', message);
 })
 
+ipc.on('pause', (event, message) => {
+    mainWindow.webContents.send('pause', message);
+})
+
+ipc.on('videoplay', (event, message) => {
+    quizWindow.webContents.send('videoplay', message);
+})
+
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
