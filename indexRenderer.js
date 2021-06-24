@@ -6,7 +6,7 @@
 
 const ipc = require('electron').ipcRenderer;
 const $vid = document.querySelector(`.video`);
-const loops = [[true, 107,[91, 93, 96]], [true, 213.2, [200, 205, 208]], [true, 308, [296, 298, 302]], [true, 382, [368, 372, 376]], [true, 440, [423, 425, 430]], [true, 471, [462, 464, 466]]];
+let loops = [[true, 107,[91, 93, 96]], [true, 213.2, [200, 205, 208]], [true, 308, [296, 298, 302]], [true, 382, [368, 372, 376]], [true, 440, [423, 425, 430]], [true, 471, [462, 464, 466]]];
 let vidTime = 0;
 let loopCounter = 0;
 let optionCounter = 0;
@@ -30,7 +30,10 @@ let cNotShown = true;
 ipc.on('messageFromMain', (event, message) => {
   console.log(message)
   loops[loopCounter][0] = false
-  loopCounter++
+  loopCounter++;
+  if(loopCounter > 5) {
+    loopCounter = 0;
+  }
   console.log(loopCounter)
   aNotShown = true;
   bNotShown = true;
@@ -43,12 +46,11 @@ ipc.on('startExp', (event, message) => {
     setTimeout(() => {
       const $readyContainer = document.querySelector(`.ready__container`);
       $readyContainer.style.display = "none";
-      $vid.currentTime = 85;
       $vid.play();
       drawLoop();
 
       // VOICE ANIMATION STARTEN
-      //ipc.send('changeStrip', 'intro');
+      ipc.send('changeStrip', 'intro');
     }, 3000);
     
   } else if (message === "readyOne") {
@@ -104,7 +106,7 @@ const drawLoop = () => {
 const checkTime = () => {
   
   // INTRODUCTION FIRST RED THEN BLUE
-  /*if(vidTime > 56 && introStop) {
+  if(vidTime > 56 && introStop) {
     introStop = false;
     ipc.send('changeStrip', 'introStop')
   }
@@ -151,7 +153,33 @@ const checkTime = () => {
     foutDone = false;
     ipc.send('changeStrip', 'foutDone');
 
-  }*/
+  }
+
+  if(vidTime >550) {
+    restartEntireExp();
+  }
 
 }
 
+const restartEntireExp = () => {
+  /* $vid.pause();
+  loops = [[true, 107, [91, 93, 96]], [true, 213.2, [200, 205, 208]], [true, 308, [296, 298, 302]], [true, 382, [368, 372, 376]], [true, 440, [423, 425, 430]], [true, 471, [462, 464, 466]]];
+  loopCounter = 0;
+  optionCounter = 0;
+  $vid.currentTime = 0;
+  drawLoopCounter = 0;
+  introduceRed = true;
+  introduceBlue = true;
+  decRed = true;
+  incRedDecBlue = true;
+  decAll = true;
+  turnOffStrip = true;
+  introStop = true;
+  fout = true;
+  foutDone = true;
+  aNotShown = true;
+  bNotShown = true;
+  cNotShown = true; */
+  ipc.send('reload', 'reload');
+  window.reload();
+}

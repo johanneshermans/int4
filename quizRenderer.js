@@ -48,6 +48,10 @@ ipc.on('messageFromSecond', (event, message) => {
     handleQuestions()
 });
 
+ipc.on('reload', (event, message) => {
+    window.reload();
+});
+
 ipc.on('changeStrip', (event, message) => {
     console.log(message);
 
@@ -175,7 +179,7 @@ ipc.on('option', (event, message) => {
 const showFirstOption = () => {
     console.log('first option');
     nothing.style.display = "none"
-    quizContainer.style.display = "block"
+    quizContainer.style.display = "flex"
     const $questionContainer = document.querySelector(`.questionContainer__${questionCounter}`);
     const $firstOption = $questionContainer.querySelector(`.questionA`);
     $firstOption.style.display = 'block';
@@ -213,7 +217,7 @@ const showQuestions = (questions, quizContainer) => {
                 '<label class="question__letter question' + letter + '">'
                 + '<input type="radio" name="question' + i + '" value="' + letter + '">'
                 + questions[i].answers[letter][0]
-                + '</label><br>'
+                + '</label>'
             );
         }
 

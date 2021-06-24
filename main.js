@@ -34,6 +34,11 @@ ipc.on('startExp', (event, message) => {
     mainWindow.webContents.send('startExp', message);
 })
 
+ipc.on('reload', (event, message) => {
+    mainWindow.reload();
+    quizWindow.reload();
+})
+
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({

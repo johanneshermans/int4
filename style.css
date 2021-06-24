@@ -26,11 +26,15 @@ body {
 }
 
 .questionContainer {
+  width: 100vw;
     display: none;
 }
 .quiz {
-    background-color: black;
     color: #e5e2d9;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .question {
     display: none;
@@ -40,11 +44,10 @@ body {
   display: none;
 }
 .answers {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
   align-items: center;
-  flex-direction: column;
-  height: 100vh;
+  justify-items: center;
 }
 .answers input {
     display: none;
